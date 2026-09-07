@@ -6,6 +6,7 @@ import account from '../assets/icons/account.svg'
 import { AssetIcon } from './AssetIcon'
 import { HoverText } from '../motion/HoverText'
 import { useTextMotion } from '../motion/textMotion'
+import { siteUrl } from '../navigation/paths'
 import './SiteHeader.css'
 
 type SiteHeaderProps = {
@@ -30,7 +31,7 @@ export function SiteHeader({ tone = 'overlay', fixed = false, motion = false, en
 
   return (
     <header ref={header} data-text-after={entranceAfter} data-text-at={entranceAt} className={`site-header site-header--${tone}${fixed ? ' site-header--fixed' : ''}`}>
-      <a className="site-header__brand" href="/" aria-label="Летора — главная" data-text-reveal={motion && entranceAfter ? 'block' : undefined}>
+      <a className="site-header__brand" href={siteUrl()} aria-label="Летора — главная" data-text-reveal={motion && entranceAfter ? 'block' : undefined}>
         <AssetIcon src={logo} className="site-header__logo" />
       </a>
       {tone === 'light' && (

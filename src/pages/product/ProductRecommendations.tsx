@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import arrow from '../../assets/home/arrow-indigo.svg'
 import { ArrivalSlider, type ArrivalSliderHandle } from '../../components/ArrivalSlider/ArrivalSlider'
 import { ArrowHover } from '../../motion/ArrowHover'
+import { siteUrl } from '../../navigation/paths'
 import './product-recommendations.css'
 
 export function ProductRecommendations() {
@@ -15,7 +16,7 @@ export function ProductRecommendations() {
           <button type="button" aria-label="Предыдущие товары" onClick={() => sliderRef.current?.previous()}>
             <ArrowHover className="product-rec-previous" src={arrow} />
           </button>
-          <img src="/assets/product/slider-line.svg" width={84} height={1} alt="" />
+          <img src={siteUrl('assets/product/slider-line.svg')} width={84} height={1} alt="" />
           <button type="button" aria-label="Следующие товары" onClick={() => sliderRef.current?.next()}>
             <ArrowHover src={arrow} />
           </button>

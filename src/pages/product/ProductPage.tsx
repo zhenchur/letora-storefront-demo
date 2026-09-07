@@ -6,9 +6,10 @@ import { usePhotoReveal } from '../../motion/usePhotoReveal'
 import { ProductInfo } from './ProductInfo'
 import { ProductRecommendations } from './ProductRecommendations'
 import { useProductStack } from './useProductStack'
+import { siteUrl } from '../../navigation/paths'
 import './product.css'
 
-const assets = '/assets/product/'
+const assets = siteUrl('assets/product/')
 const photos = [
   { file: 'front.png', alt: 'Бомбер «Барельеф» пыльно-розового цвета — вид спереди' },
   { file: 'back.png', alt: 'Бомбер «Барельеф» — вид со спины' },
@@ -41,7 +42,7 @@ export default function ProductPage() {
     <main className="product" ref={page} aria-labelledby="product-name">
       <nav className="product-crumbs" aria-label="Хлебные крошки" data-text-after="product-name" data-text-at="start">
         <ol>
-          <li data-text-reveal="block"><a href="/"><HoverText>Главная</HoverText></a><Chevron /></li>
+          <li data-text-reveal="block"><a href={siteUrl()}><HoverText>Главная</HoverText></a><Chevron /></li>
           <li data-text-reveal="block" data-text-delay="0.08"><span className="product-crumb-muted">Каталог</span><Chevron /></li>
           <li data-text-reveal="block" data-text-delay="0.16"><span>Верхняя одежда</span></li>
         </ol>

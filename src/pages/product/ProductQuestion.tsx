@@ -2,6 +2,7 @@ import { useId, useRef, useState } from 'react'
 import { ArrowHover } from '../../motion/ArrowHover'
 import { StringDivider } from '../../motion/StringDivider'
 import { gsap, ScrollTrigger, useGSAP } from '../../motion/gsap'
+import { siteUrl } from '../../navigation/paths'
 
 type ProductQuestionProps = { title: string; answer?: string; last: boolean }
 
@@ -99,7 +100,7 @@ export function ProductQuestion({ title, answer, last }: ProductQuestionProps) {
           onClick={answer ? () => toggle.current(!open.current) : undefined}
         >
           <span className="product-question-action">{expanded ? 'Свернуть' : 'Открыть'}</span>
-          <ArrowHover src="/assets/product/chevron-right.svg" className="product-question-arrow" />
+          <ArrowHover src={siteUrl('assets/product/chevron-right.svg')} className="product-question-arrow" />
         </button>
       </div>
       {answer && (

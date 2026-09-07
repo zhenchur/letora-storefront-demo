@@ -1,5 +1,6 @@
 import { HoverText } from '../../motion/HoverText'
 import { ProductQuestion } from './ProductQuestion'
+import { siteUrl } from '../../navigation/paths'
 import './product-info.css'
 
 const description = 'Бомбер «Барельеф» — исследование формы и движения. Мягкие радиальные складки создают скульптурный объём, а высокий воротник и металлическая молния выстраивают строгую вертикаль. Свободный силуэт легко сочетается как с повседневными, так и с вечерними образами.'
@@ -21,7 +22,7 @@ export function ProductInfo() {
         <div className="product-tabs" role="group" aria-label="Сведения о товаре">
           {['Описание', 'Состав', 'Уход'].map((label, index) => (
             <button type="button" aria-disabled="true" aria-pressed={index === 0} key={label} data-text-reveal="block" data-text-delay={index * 0.08}>
-              {index === 0 && <img src="/assets/product/tab-dot.svg" width="6" height="6" alt="" />}
+              {index === 0 && <img src={siteUrl('assets/product/tab-dot.svg')} width="6" height="6" alt="" />}
               <HoverText>{label}</HoverText>
             </button>
           ))}

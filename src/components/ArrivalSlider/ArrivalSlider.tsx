@@ -1,5 +1,6 @@
 import { useImperativeHandle, useRef, type ReactNode, type Ref } from 'react'
 import { useArrivalSlider } from './useArrivalSlider'
+import { siteUrl } from '../../navigation/paths'
 import bomber from '../../assets/home/new-bomber.jpg'
 import puffer from '../../assets/home/new-puffer.jpg'
 import jacket from '../../assets/home/new-jacket.jpg'
@@ -7,7 +8,7 @@ import scarf from '../../assets/home/new-peek.jpg'
 import './ArrivalSlider.css'
 
 const products = [
-  { image: bomber, title: <>Бомбер "<em>Барельеф</em>"</>, price: '9 900 ₽', alt: 'Бомбер «Барельеф» пыльно-розового цвета', href: '/product/barelyef' },
+  { image: bomber, title: <>Бомбер "<em>Барельеф</em>"</>, price: '9 900 ₽', alt: 'Бомбер «Барельеф» пыльно-розового цвета', href: siteUrl('product/barelyef') },
   { image: puffer, title: <>Пуховик "Ох, и <em>личность</em> ты"</>, price: '48 000 ₽', alt: 'Детали пуховика «Ох, и личность ты»' },
   { image: jacket, title: <>Жакет "<em>Форма</em>" из хлопка</>, price: '22 000 ₽', alt: 'Хлопковый жакет «Форма»' },
   // The reference only supplies a photograph for the fourth item, without a price.

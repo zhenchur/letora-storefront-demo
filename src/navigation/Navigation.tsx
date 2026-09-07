@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useLayoutEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { ScrollTrigger } from '../motion/gsap'
+import { routePath } from './paths'
 
 type Position = { x: number; y: number }
 type Entry = { key: string; scroll: Position }
@@ -38,15 +39,15 @@ function currentPosition(): Position {
 }
 
 export function isHome(pathname: string) {
-  return pathname.replace(/\/+$/, '') === ''
+  return routePath(pathname) === '/'
 }
 
 function isRoute(pathname: string) {
-  return isHome(pathname) || pathname.replace(/\/+$/, '') === '/product/barelyef'
+  return isHome(pathname) || routePath(pathname) === '/product/barelyef'
 }
 
 function samePage(a: Pick<Location, 'pathname' | 'search'>, b: Pick<Location, 'pathname' | 'search'>) {
-  return a.pathname === b.pathname && a.search === b.search
+  return routePath(a.pathname) === routePath(b.pathname) && a.search === b.search
 }
 
 const Navigation = createContext<{
