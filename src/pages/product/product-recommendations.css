@@ -1,0 +1,54 @@
+.product-rec {
+  --rec-gutter: 32px;
+  margin-top: 12.604167vw;
+}
+
+.product-rec-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 56px;
+}
+
+.product-rec-heading h2 {
+  margin: 0;
+  color: var(--palette-terracotta);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.product-rec-navigation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-rec-navigation button,
+.product-rec-navigation button img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.product-rec-navigation > img {
+  width: 84px;
+  height: 1px;
+}
+
+.product-rec-previous {
+  transform: scaleX(-1);
+}
+
+.product-rec .arrivals-slider {
+  --page-gutter: var(--rec-gutter);
+  margin-inline: calc(-1 * var(--rec-gutter));
+}
+
+@media (max-width: 1100px) {
+  .product-rec {
+    --rec-gutter: 24px;
+  }
+}

@@ -1,0 +1,66 @@
+@font-face {
+  font-family: 'Wix Madefor Text';
+  src: url('../../assets/fonts/WixMadeforText-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+.hero-menu-label {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-menu-label__bracket {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease-out;
+}
+
+.hero-menu-label__bracket--left { right: calc(100% + 10px); }
+.hero-menu-label__bracket--right { left: calc(100% + 10px); }
+.hero-menu-label[data-active] .hero-menu-label__bracket { opacity: 1; }
+
+.hero-menu-label__words {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  height: 150px;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-family: 'Wix Madefor Text', var(--font-sans);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.27;
+  letter-spacing: .14px;
+  text-transform: lowercase;
+  text-align: left;
+}
+
+.hero-menu-label__words > span {
+  position: absolute;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.hero-menu-label__words > [hidden] { display: none; }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero:has(.hero-menu-label) .hero__category { transition: opacity .4s ease-out; }
+  .hero:has(.hero-menu-label) .hero__caption,
+  .hero:has(.hero-menu-label) .hero__slider { transition: filter .4s ease-out; }
+
+  .hero:has(.hero-menu-label[data-active]) .hero__category:not(:has(.hero-menu-label[data-active])) { opacity: .1; }
+  .hero:has(.hero-menu-label[data-active]) .hero__caption,
+  .hero:has(.hero-menu-label[data-active]) .hero__slider { filter: opacity(.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-menu-label__bracket { transition: none; }
+}

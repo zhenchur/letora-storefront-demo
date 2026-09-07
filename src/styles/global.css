@@ -1,0 +1,87 @@
+@font-face {
+  font-family: 'Letora Livret';
+  src: url('../assets/fonts/TTLivretSubhead-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Letora Livret';
+  src: url('../assets/fonts/TTLivretSubhead-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Letora Wix Display';
+  src: url('../assets/fonts/WixMadeforDisplay-Variable.ttf') format('truetype');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-serif: 'Letora Livret', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Letora Wix Display', 'Segoe UI', Arial, sans-serif;
+  --font-tabs: 600 1rem / 1 var(--font-sans);
+  --page-gutter: 32px;
+  --grid-gap: 16px;
+  --color-background: var(--palette-white);
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 1024px;
+  margin: 0;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+/* The first delivery is a static layout. Disabled controls retain Figma's appearance. */
+button:disabled {
+  opacity: 1;
+  -webkit-text-fill-color: currentColor;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+}
+
+img {
+  display: block;
+}
+
+h1,
+p {
+  margin: 0;
+}

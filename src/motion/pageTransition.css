@@ -1,0 +1,30 @@
+.site-shell {
+  isolation: isolate;
+  min-height: 100svh;
+  background: var(--palette-porcelain);
+}
+
+.page-backdrop {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background: var(--palette-white);
+  pointer-events: none;
+}
+
+html[data-site-loading] .page-backdrop {
+  background: var(--palette-porcelain);
+}
+
+/* The backdrop owns the page fill while the foreground fades independently. */
+.site-shell:not([data-page-transition='idle']) .product,
+.site-shell:not([data-page-transition='idle']) .hero,
+.site-shell:not([data-page-transition='idle']) .site-header--light {
+  background: transparent;
+}
+
+/* Keep the gutter without leaving a native scrollbar active during the fade. */
+html.lenis.lenis-stopped[data-page-transition] {
+  scrollbar-gutter: stable;
+  overflow: hidden;
+}

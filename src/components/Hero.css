@@ -1,0 +1,203 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  color: var(--palette-white);
+  background: var(--palette-porcelain);
+}
+
+/* Figma: photo frame 2137 × 1065, x −109, y −51 inside the 1920 × 900 hero. */
+.hero__media {
+  position: absolute;
+  z-index: -1;
+  top: -5.666667%;
+  left: -5.677083%;
+  width: 111.302083%;
+  height: 118.333333%;
+}
+
+.hero__media::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  content: '';
+  background: rgb(0 0 0 / 40%);
+}
+
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero__photo ~ .hero__photo,
+.hero__caption ~ .hero__caption {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.hero__categories {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__category {
+  position: absolute;
+  transform: translateY(-50%);
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 18px;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+.hero__category-label {
+  display: block;
+}
+
+.hero__category--dresses {
+  top: 18%;
+  left: 8.59375%;
+}
+
+.hero__category--skirts {
+  top: 26.666667%;
+  left: 31.5625%;
+}
+
+.hero__category--blouses {
+  top: 36%;
+  left: 26.25%;
+  transform: translate(-50%, -50%);
+}
+
+.hero__category--outerwear {
+  top: 30.555556%;
+  left: 53.59375%;
+}
+
+.hero__category--tops {
+  top: 18.222222%;
+  left: 80.208333%;
+}
+
+.hero__category--trousers {
+  top: 30.777778%;
+  left: 88.229167%;
+}
+
+.hero__detail {
+  position: absolute;
+  top: calc(13.212222% - 1px);
+  left: calc(35.064062% - 1px);
+  width: 2px;
+  height: 2.13489px;
+}
+
+.hero__slider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.hero__slider > button:not(.hero__timer),
+.hero__slider .arrow-hover {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.hero__slider button:not(:disabled) {
+  cursor: pointer;
+}
+
+.hero__previous {
+  transform: scaleX(-1);
+}
+
+.hero__timer {
+  display: flex;
+  align-items: center;
+  width: 84px;
+  height: 16px;
+}
+
+.hero__track,
+.hero__progress {
+  display: block;
+  width: 100%;
+  height: 1px;
+}
+
+.hero__track {
+  background: rgb(255 255 255 / 20%);
+  transform: translateY(-0.5px);
+}
+
+.hero__progress {
+  background: var(--palette-white);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.hero__captions {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__caption {
+  position: absolute;
+  top: 84.666667%;
+  right: var(--page-gutter);
+  left: var(--page-gutter);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--grid-gap);
+}
+
+.hero__eyebrow {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.hero__action {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 18px;
+  pointer-events: auto;
+}
+
+.hero__action .arrow-hover {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}

@@ -1,0 +1,31 @@
+:root {
+  /* Figma primitives */
+  --palette-chestnut: #462828;
+  --palette-beige: #dcbeaf;
+  --palette-dusty-rose: #cd968c;
+  --palette-indigo: #37557d;
+  --palette-ivory: #fffaf5;
+  --palette-bluish-grey: #8ca0b4;
+  --palette-porcelain: #fff0eb;
+  --palette-terracotta: #915a46;
+  --palette-white: #ffffff;
+
+  /* Default mapping from the Figma placeholder */
+  --color-background: var(--palette-porcelain);
+  --color-text: var(--palette-chestnut);
+  --color-text-muted: rgb(70 40 40 / 68%);
+  --color-border: rgb(70 40 40 / 18%);
+  --color-surface: rgb(70 40 40 / 7%);
+  --color-focus: var(--palette-indigo);
+  color-scheme: light;
+}
+
+[data-color-theme='chestnut'] {
+  --color-background: var(--palette-chestnut);
+  --color-text: var(--palette-white);
+  --color-text-muted: rgb(255 255 255 / 72%);
+  --color-border: rgb(255 255 255 / 24%);
+  --color-surface: rgb(255 255 255 / 10%);
+  --color-focus: var(--palette-white);
+  color-scheme: dark;
+}

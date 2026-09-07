@@ -1,0 +1,140 @@
+.product-info {
+  width: max(400px, 30.104167vw);
+  margin: 7.395833vw auto 0;
+}
+
+.product-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 44px;
+}
+
+.product-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--palette-bluish-grey);
+  font: var(--font-tabs);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.product-tabs button[aria-pressed='true'] {
+  color: var(--palette-indigo);
+}
+
+.product-tabs img {
+  flex: 0 0 6px;
+  width: 6px;
+  height: 6px;
+}
+
+.product-info > p,
+.product-question-content > p {
+  color: var(--palette-chestnut);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  text-indent: 44px;
+}
+
+.product-info > p {
+  margin-top: 54px;
+}
+
+.product-faq {
+  width: calc((100% - 8px) * 2 / 3);
+  margin: 10.729167vw auto 0;
+}
+
+.product-faq > h2 {
+  margin: 0;
+  color: var(--palette-terracotta);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.product-questions {
+  margin-top: 54px;
+}
+
+.product-question {
+  position: relative;
+  padding: 32px 10px;
+  border-top: 1px solid transparent;
+}
+
+.product-question:last-child {
+  border-bottom: 1px solid transparent;
+}
+
+.product-question > .string-divider {
+  top: -1px;
+}
+
+.product-question > .product-question-divider-bottom {
+  top: auto;
+  bottom: -1px;
+  transform: translateY(50%);
+}
+
+.product-question-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 18px;
+}
+
+.product-question h3 {
+  margin: 0;
+  color: var(--palette-terracotta);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.product-question-heading button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--palette-indigo);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.product-question-heading button[aria-expanded='false'] .product-question-action {
+  visibility: hidden;
+}
+
+.product-question-arrow {
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg);
+}
+
+.product-question-heading button[aria-expanded='true'] .product-question-arrow {
+  transform: rotate(-90deg);
+}
+
+.product-question-panel {
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.product-question-content {
+  padding-top: 32px;
+}
+
+.product-question-content > p {
+  margin: 0;
+}

@@ -1,0 +1,8 @@
+.text-reveal-line {
+  display: block;
+  text-indent: 0;
+}
+
+.text-reveal-line:first-child {
+  text-indent: inherit;
+}

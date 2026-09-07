@@ -1,0 +1,59 @@
+.section-cursor-line {
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.section-cursor-line.is-enabled {
+  display: block;
+}
+
+.section-cursor-point {
+  position: fixed;
+  z-index: 2147483647;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  transform: translate3d(-100px, -100px, 0);
+}
+
+/* Same 134px → 5px point and entrance easing as CustomCursor in the placeholder. */
+.section-cursor-shape {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 134px;
+  height: 134px;
+  border: 1px solid transparent;
+  background: var(--palette-dusty-rose);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 120ms ease-out;
+  will-change: transform, opacity;
+}
+
+.section-cursor-point.is-visible[data-cursor-mode='default'] .section-cursor-shape {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.03731345);
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-cursor-line,
+  .section-cursor-point {
+    display: none !important;
+  }
+
+  .section-cursor-shape {
+    transition: none;
+  }
+}

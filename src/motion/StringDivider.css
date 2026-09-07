@@ -1,0 +1,19 @@
+.string-divider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 40px;
+  overflow: visible;
+  color: var(--palette-beige);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.string-divider path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  pointer-events: none;
+}

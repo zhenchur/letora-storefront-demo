@@ -1,0 +1,28 @@
+.arrow-hover {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.arrow-hover-track {
+  position: absolute;
+  inset: 0;
+}
+
+.arrow-hover-track > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.arrow-hover-track > .arrow-hover-copy {
+  left: -100%;
+}
+
+.arrow-hover[data-direction='left'] .arrow-hover-copy {
+  left: 100%;
+}
