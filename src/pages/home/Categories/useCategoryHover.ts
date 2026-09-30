@@ -1,99 +1,160 @@
 import type { RefObject } from 'react'
 import { gsap, useGSAP } from '../../../motion/gsap'
+import { CHARACTER_REVEAL_CLEAR_PROPS, createCharacterRevealVars } from '../../../motion/characterReveal'
+import { setPhotoMask } from '../../../motion/photoReveal'
+
+// Hover needs visible movement from the first frame, unlike a slow scroll entrance.
+const PHOTO_HOVER_DURATION = 0.65
+const PHOTO_HOVER_EASE = 'power3.out'
 
 export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
   useGSAP((context) => {
     const section = scope.current
-    const cover = section?.querySelector<HTMLElement>('.categories__cover')
-    const motion = section?.querySelector<HTMLElement>('.categories__cover-motion')
-    const stage = section?.querySelector<HTMLElement>('.categories__stage')
+    const covers = Array.from(section?.querySelectorAll<HTMLElement>('.categories__cover') ?? [])
     const list = section?.querySelector<HTMLElement>('.categories__list')
-    if (!section || !cover || !motion || !stage || !list) return
+    const stage = section?.querySelector<HTMLElement>('.categories__stage')
+    if (!section || !covers.length || !list || !stage) return
 
     const items = Array.from(list.querySelectorAll<HTMLButtonElement>('[data-category]'))
-    const images = Array.from(cover.querySelectorAll('img'))
+    const labels = items.map((item) => item.querySelector<HTMLElement>('.categories__label')!)
+    const imageGroups = covers.map((cover) => Array.from(cover.querySelectorAll<HTMLImageElement>('img')))
+    const images = imageGroups.flat()
+    const pairs = items.map((_, index) => imageGroups.map((group) => group[index]))
+    const dimensions = covers.map((cover) => ({ width: cover.clientWidth, height: cover.clientHeight }))
     const restLabels = items.map((item) => item.querySelector<HTMLElement>('.categories__label-rest')!)
     const activeLabels = items.map((item) => item.querySelector<HTMLElement>('.categories__label-active')!)
-    const numbers = items.map((item) => Array.from(item.querySelectorAll<HTMLElement>('.categories__number')))
-    const allNumbers = numbers.flat()
+    const labelCharacters = activeLabels.map((label) => Array.from(label.querySelectorAll<HTMLElement>('.categories__active-name .categories__hover-character')))
+    const allCharacters = labelCharacters.flat()
+    const { from, to } = createCharacterRevealVars()
+    const revealVars = {
+      ...to,
+      stagger: (index: number, character: HTMLElement) => Number(character.dataset.categoryCharacterIndex ?? index) * to.stagger,
+    }
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const hover = window.matchMedia('(any-hover: hover)')
     let active = -1
+    let visibleImage = -1
     let pointer: { x: number; y: number } | null = null
     let keyboardFocus = false
+    let disposed = false
     let frame = 0
     let transition: gsap.core.Timeline | undefined
+    let photoTween: gsap.core.Tween | undefined
+    let photoRequest = 0
+    const photosReady = pairs.map(() => false)
+    // Decode each pair once ahead of hover; switching rows never restarts that work.
+    const photoLoads = pairs.map((pair, index) => Promise.all(
+      pair.map((image) => image.decode().catch(() => undefined)),
+    ).then(() => {
+      photosReady[index] = pair.every((image) => image.complete && image.naturalWidth > 0)
+    }))
+    const photo = { progress: 0 }
 
-    // Hover owns only the inner labels; the page reveal still owns each button.
-    gsap.set(activeLabels, { opacity: 0, y: 8, filter: 'blur(5px)' })
-    gsap.set(allNumbers, { opacity: 0, xPercent: -50, yPercent: -50, x: 0, y: 8 })
+    // Link entrance owns the label wrapper; hover owns inner characters and layer visibility.
+    gsap.set(activeLabels, { autoAlpha: 0 })
+    const available = () => !document.hidden && !section.closest('[inert]')
+    const alignCovers = () => {
+      if (active < 0) return
+      const item = items[active]
+      const label = labels[active]
+      // Use the label's layout center, independent of its temporary entrance transform.
+      const center = item.getBoundingClientRect().top - stage.getBoundingClientRect().top
+        + label.offsetTop + label.offsetHeight / 2
+      stage.style.setProperty('--category-cover-y', `${center}px`)
+    }
+    const measurePhotos = () => {
+      covers.forEach((cover, index) => {
+        dimensions[index].width = cover.clientWidth
+        dimensions[index].height = cover.clientHeight
+      })
+    }
+    const renderPhoto = () => {
+      if (visibleImage < 0) return
+      pairs[visibleImage].forEach((image, index) => {
+        setPhotoMask(image, dimensions[index].width, dimensions[index].height, photo.progress)
+      })
+    }
+    const resize = new ResizeObserver(() => {
+      alignCovers()
+      measurePhotos()
+      if (photo.progress < 1) renderPhoto()
+    })
+    covers.forEach((cover) => resize.observe(cover))
+    resize.observe(stage)
 
-    // The position has its own tweens, so changing images never interrupts inertia.
-    gsap.set(motion, { xPercent: -50, yPercent: -50, x: 0, y: 0 })
-    const xTo = gsap.quickTo(motion, 'x', { duration: 0.65, ease: 'power3.out' })
-    const yTo = gsap.quickTo(motion, 'y', { duration: 0.65, ease: 'power3.out' })
-    const moveCover = () => {
+    const revealPhoto = context.add('revealCategoryPhoto', (index: number, request: number) => {
+      if (disposed || request !== photoRequest || index !== active || !photosReady[index] || !available()) return
+      photoTween?.kill()
+      const pair = pairs[index]
+      visibleImage = index
+      gsap.set(covers, { autoAlpha: 1 })
+      gsap.set(pair, { autoAlpha: 1, zIndex: 1 })
+      measurePhotos()
+      photo.progress = reducedMotion.matches ? 1 : 0
+      renderPhoto()
+      const finish = () => {
+        if (disposed || request !== photoRequest || index !== active) return
+        gsap.set(pair, { clearProps: 'clipPath,willChange' })
+      }
       if (reducedMotion.matches) {
-        xTo.tween.pause()
-        yTo.tween.pause()
-        gsap.set(motion, { x: 0, y: 0 })
+        finish()
         return
       }
-      const bounds = stage.getBoundingClientRect()
-      const point = active >= 0 && !keyboardFocus ? pointer : null
-      xTo(point ? point.x - bounds.left - bounds.width / 2 : 0)
-      yTo(point ? point.y - bounds.top - bounds.height / 2 : 0)
-    }
+      gsap.set(pair, { willChange: 'clip-path' })
+      photoTween = gsap.to(photo, {
+        progress: 1,
+        duration: PHOTO_HOVER_DURATION,
+        ease: PHOTO_HOVER_EASE,
+        lazy: false,
+        onUpdate: renderPhoto,
+        onComplete: finish,
+      })
+    })
 
-    const select = context.add('select', (index: number) => {
+    const select = context.add('selectCategory', (index: number) => {
+      if (!available()) index = -1
       if (index === active) return
-      const wasHidden = Number(gsap.getProperty(cover, 'opacity')) === 0
+      const request = ++photoRequest
       active = index
       section.dataset.activeCategory = index < 0 ? '' : String(index)
       items.forEach((item, i) => item.toggleAttribute('data-active', i === index))
 
-      // Retarget from the current values: no exit queue or stale completion callbacks.
+      // Drop the previous cover immediately, including interrupted reveals and exits.
+      photoTween?.kill()
+      photoTween = undefined
       transition?.kill()
-      const visible = index >= 0
-      const coverTarget = { autoAlpha: visible ? 1 : 0, scale: visible ? 1 : 0.96 }
+      gsap.set(covers, { autoAlpha: 0 })
+      gsap.set(images, { autoAlpha: 0, clearProps: 'clipPath,willChange,zIndex' })
+      visibleImage = -1
+      const selected = index >= 0
+      if (selected) {
+        alignCovers()
+        // A fresh, identical reveal for every selection, including rapid A → B → A.
+        if (photosReady[index]) revealPhoto(index, request)
+        else void photoLoads[index].then(() => revealPhoto(index, request))
+      }
+
       if (reducedMotion.matches) {
-        gsap.set(cover, coverTarget)
-        images.forEach((image, i) => gsap.set(image, { opacity: i === index ? 1 : 0 }))
+        gsap.set(allCharacters, { clearProps: CHARACTER_REVEAL_CLEAR_PROPS })
         items.forEach((_, i) => {
-          gsap.set(restLabels[i], { opacity: i === index ? 0 : 1 })
-          gsap.set(activeLabels[i], { opacity: i === index ? 1 : 0, y: 0, filter: 'none' })
-          gsap.set(numbers[i], { opacity: i === index ? 1 : 0, y: 0 })
+          gsap.set(restLabels[i], { autoAlpha: i === index ? 0 : 1 })
+          gsap.set(activeLabels[i], { autoAlpha: i === index ? 1 : 0 })
         })
         return
       }
 
-      const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const timeline = gsap.timeline({ defaults: { ease: 'quart.out' } })
       transition = timeline
-      timeline.to(cover, { ...coverTarget, duration: visible ? 0.85 : 0.3 }, 0)
-      if (index >= 0) {
-        images.forEach((image, i) => {
-          const opacity = i === index ? 1 : 0
-          if (wasHidden) gsap.set(image, { opacity })
-          else timeline.to(image, { opacity, duration: 0.55, ease: 'power2.inOut' }, 0)
-        })
-      }
       items.forEach((_, i) => {
-        const selected = i === index
-        timeline
-          .to(restLabels[i], { opacity: selected ? 0 : 1, duration: 0.25 }, 0)
-          .to(activeLabels[i], {
-            opacity: selected ? 1 : 0,
-            y: selected ? 0 : 8,
-            filter: selected ? 'blur(0px)' : 'blur(5px)',
-            duration: selected ? 0.7 : 0.2,
-            ease: 'quart.out',
-          }, 0)
-          .to(numbers[i], {
-            opacity: selected ? 1 : 0,
-            y: selected ? 0 : 8,
-            duration: selected ? 0.6 : 0.2,
-            stagger: selected ? 0.04 : 0,
-          }, selected ? 0.12 : 0)
+        const current = i === index
+        timeline.to(restLabels[i], { autoAlpha: current ? 0 : 1, duration: 0.2 }, 0)
+        if (current) {
+          timeline
+            .set(activeLabels[i], { autoAlpha: 1 }, 0)
+            .fromTo(labelCharacters[i], from, revealVars, 0)
+        } else {
+          timeline.to(activeLabels[i], { autoAlpha: 0, duration: 0.2 }, 0)
+        }
       })
     })
 
@@ -106,31 +167,28 @@ export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
     const syncPointer = () => {
       if (keyboardFocus) {
         select(focusedIndex())
-        moveCover()
         return
       }
       const index = pointer && hover.matches
         ? itemIndex(document.elementFromPoint(pointer.x, pointer.y)) : -1
       select(index >= 0 ? index : focusedIndex())
-      moveCover()
     }
     const onPointer = (event: PointerEvent) => {
-      if (event.pointerType === 'touch' || !hover.matches) return
+      if (event.pointerType === 'touch') { onReset(); return }
+      if (!hover.matches || !available()) return
       // Layout changes can emit pointerover without the user moving the mouse.
       if (keyboardFocus && (event.type === 'pointerover'
         || (pointer?.x === event.clientX && pointer?.y === event.clientY))) return
       keyboardFocus = false
       pointer = { x: event.clientX, y: event.clientY }
       select(itemIndex(event.target))
-      moveCover()
     }
-    const onLeave = () => { pointer = null; select(focusedIndex()); moveCover() }
+    const onLeave = () => { pointer = null; select(focusedIndex()) }
     const onFocus = () => {
       const index = focusedIndex()
       if (index >= 0) {
         keyboardFocus = true
         select(index)
-        moveCover()
       }
     }
     const onBlur = (event: FocusEvent) => {
@@ -139,7 +197,6 @@ export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
       keyboardFocus = false
       select(pointer && hover.matches
         ? itemIndex(document.elementFromPoint(pointer.x, pointer.y)) : -1)
-      moveCover()
     }
     const onScroll = () => {
       if (pointer && !frame) frame = requestAnimationFrame(() => {
@@ -153,13 +210,16 @@ export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
       pointer = null
       keyboardFocus = false
       select(-1)
-      moveCover()
     }
     const onMediaChange = () => {
       if (!hover.matches) pointer = null
       active = -2
       syncPointer()
     }
+    const onVisibility = () => { if (document.hidden) onReset() }
+    const availability = new MutationObserver(() => { if (!available()) onReset() })
+    const content = section.closest('.site-content')
+    if (content) availability.observe(content, { attributes: true, attributeFilter: ['inert'] })
 
     section.addEventListener('pointerover', onPointer)
     section.addEventListener('pointermove', onPointer)
@@ -170,13 +230,16 @@ export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     window.addEventListener('blur', onReset)
+    document.addEventListener('visibilitychange', onVisibility)
     reducedMotion.addEventListener('change', onMediaChange)
     hover.addEventListener('change', onMediaChange)
 
     return () => {
+      disposed = true
       cancelAnimationFrame(frame)
-      xTo.tween.kill()
-      yTo.tween.kill()
+      availability.disconnect()
+      resize.disconnect()
+      photoTween?.kill()
       transition?.kill()
       section.removeEventListener('pointerover', onPointer)
       section.removeEventListener('pointermove', onPointer)
@@ -187,11 +250,14 @@ export function useCategoryHover(scope: RefObject<HTMLElement | null>) {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
       window.removeEventListener('blur', onReset)
+      document.removeEventListener('visibilitychange', onVisibility)
       reducedMotion.removeEventListener('change', onMediaChange)
       hover.removeEventListener('change', onMediaChange)
       items.forEach((item) => item.removeAttribute('data-active'))
       delete section.dataset.activeCategory
-      gsap.set([motion, cover, ...images, ...restLabels, ...activeLabels, ...allNumbers], { clearProps: 'all' })
+      stage.style.removeProperty('--category-cover-y')
+      gsap.set([...covers, ...images, ...restLabels, ...activeLabels], { clearProps: 'all' })
+      gsap.set(allCharacters, { clearProps: CHARACTER_REVEAL_CLEAR_PROPS })
     }
   }, { scope })
 }

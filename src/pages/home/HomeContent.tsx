@@ -4,10 +4,10 @@ import { ArrowHover } from '../../motion/ArrowHover'
 import { usePhotoReveal } from '../../motion/usePhotoReveal'
 import { useTextMotion } from '../../motion/textMotion'
 import { ArrivalSlider } from '../../components/ArrivalSlider/ArrivalSlider'
+import { homeProducts } from './homeProducts'
 import { BrandSignature } from './BrandSignature'
 import { EditorsCard } from './EditorsCard'
 import { Categories } from './Categories/Categories'
-import { SectionCursor } from '../../motion/SectionCursor/SectionCursor'
 import arrow from '../../assets/home/arrow-indigo.svg'
 import blouse from '../../assets/home/edit-blouse.jpg'
 import sweater from '../../assets/home/edit-sweater.jpg'
@@ -63,7 +63,7 @@ function NewArrivals() {
   return (
     <section className="new-arrivals" aria-labelledby="new-arrivals-title">
       <SectionHeader id="new-arrivals-title" title="Новинки" tabs={['Распродажа', 'Скоро в продаже', 'Популярное']} action="Все товары" />
-      <ArrivalSlider />
+      <ArrivalSlider products={homeProducts} />
     </section>
   )
 }
@@ -100,7 +100,6 @@ export function HomeContent() {
       <NewArrivals />
       <Categories />
       <EditorsSelection />
-      <SectionCursor scope={content} />
     </div>
   )
 }

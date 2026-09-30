@@ -50,12 +50,16 @@ export function useTextMotion(scope: RefObject<HTMLElement | null>, enabled = tr
           ?.querySelector<HTMLImageElement>('img[data-photo-reveal]')
         const gate = element.closest<HTMLElement>('[data-text-after]')
         const after = gate?.dataset.textAfter
-        const startTogether = gate?.dataset.textAt === 'start'
+        const linkedPhotoCaption = !!photo && !after && element.dataset.textReveal !== 'copy'
+        const startTogether = linkedPhotoCaption || gate?.dataset.textAt === 'start'
         const dependency = after ? document.getElementById(after) : photo
         const isPhoto = dependency?.matches('img[data-photo-reveal]')
         const event = isPhoto ? PHOTO_REVEAL_COMPLETE : TEXT_REVEAL_COMPLETE
         const startEvent = isPhoto ? PHOTO_REVEAL_START : TEXT_REVEAL_START
-        const { from, to } = createTextRevealVars({ bodyCopy: element.dataset.textReveal === 'copy' })
+        const { from, to } = createTextRevealVars({
+          bodyCopy: element.dataset.textReveal === 'copy',
+          tilt: element.dataset.textReveal === 'heading',
+        })
         const reveal = (targets: Element[]) => {
           cancelGate()
           // Restored scroll must not wait for an intro that is already above the viewport.
@@ -66,7 +70,9 @@ export function useTextMotion(scope: RefObject<HTMLElement | null>, enabled = tr
             return result
           }
 
-          let inView = element.getBoundingClientRect().top < window.innerHeight * 0.88
+          // A sticky panel reveals as a unit, including its internally scrollable content.
+          // A card and its caption enter together, even when the caption is below the fold.
+          let inView = linkedPhotoCaption || !!element.closest('[data-text-in-view]') || element.getBoundingClientRect().top < window.innerHeight * 0.88
           // Keep the waiting state through ScrollTrigger refresh/startAt reverts.
           if (dependency) gsap.set(targets, from)
           const tween = gsap.fromTo(targets, from, {

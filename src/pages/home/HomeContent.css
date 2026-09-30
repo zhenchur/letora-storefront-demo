@@ -88,14 +88,14 @@
 .product-caption h3 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 16px;
 }
 
 .product-caption p {
-  margin-top: 6px;
-  font-size: 0.875rem;
+  margin-top: 12px;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 18px;
 }
@@ -137,11 +137,24 @@
 }
 
 .editors__text {
-  margin-top: 14px;
+  margin-top: 24px;
   color: var(--palette-chestnut);
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 24px;
+}
+
+.home-content .arrival-card__caption h3,
+.home-content .arrival-card__number {
+  font-size: 1.25rem;
+}
+
+.home-content .arrival-card__caption p {
+  font-size: 1rem;
+}
+
+.home-content .arrival-card__caption--rest p {
+  margin-top: 12px;
 }
 
 @media (max-width: 1279px) {

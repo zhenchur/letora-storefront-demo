@@ -4,16 +4,16 @@ import { StringDivider } from '../../motion/StringDivider'
 import { gsap, ScrollTrigger, useGSAP } from '../../motion/gsap'
 import { siteUrl } from '../../navigation/paths'
 
-type ProductQuestionProps = { title: string; answer?: string; last: boolean }
+type ProductQuestionProps = { title: string; answer?: string; last: boolean; defaultExpanded?: boolean }
 
-export function ProductQuestion({ title, answer, last }: ProductQuestionProps) {
+export function ProductQuestion({ title, answer, last, defaultExpanded = false }: ProductQuestionProps) {
   const id = useId()
   const row = useRef<HTMLElement>(null)
   const panel = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
-  const open = useRef(false)
+  const open = useRef(defaultExpanded)
   const toggle = useRef<(next: boolean) => void>(() => {})
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(defaultExpanded)
 
   useGSAP(() => {
     const region = panel.current

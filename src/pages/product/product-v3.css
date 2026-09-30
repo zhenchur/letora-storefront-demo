@@ -1,0 +1,183 @@
+.product-v3-page {
+  position: relative;
+  container-type: inline-size;
+  background: var(--palette-white);
+}
+
+.product-v3 {
+  --product-v3-purchase-width: max(340px, 28.4375cqw);
+  --product-v3-gallery-width: 47.864583cqw;
+  --product-v3-gallery-left: 11.40625cqw;
+  --product-v3-faq-gap: 10.052083cqw;
+  color: var(--palette-indigo);
+  background: var(--palette-white);
+  font: 600 14px / 18px var(--font-sans);
+}
+
+.product-v3__detail-region {
+  position: relative;
+  display: flow-root;
+  padding-bottom: var(--product-v3-faq-gap);
+}
+
+.product-v3__hero {
+  position: relative;
+  min-height: 720px;
+  height: 46.666667cqw;
+  color: var(--palette-white);
+}
+
+.product-v3__media,
+.product-v3__hero-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.product-v3__media { overflow: hidden; }
+.product-v3__hero-shade { background: rgb(0 0 0 / 40%); }
+
+.product-v3__hero-crop {
+  position: absolute;
+  top: 0;
+  left: -1.614583cqw;
+  width: calc(100% + 1.614583cqw);
+  height: 100%;
+  overflow: hidden;
+}
+
+.product-v3__hero-image {
+  position: absolute;
+  top: -96.2%;
+  left: 0;
+  width: 100%;
+  height: 326.66%;
+  object-fit: cover;
+}
+
+.product-v3__crumbs {
+  position: absolute;
+  top: 102px;
+  left: var(--page-gutter);
+  font-size: 12px;
+}
+
+.product-v3__crumbs ol {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-v3__crumbs a,
+.product-v3__crumbs li > span { opacity: .5; }
+.product-v3__crumbs a:hover { opacity: 1; }
+
+.product-v3__hero h1 {
+  position: absolute;
+  top: 76.939174%;
+  left: 18.020833cqw;
+  margin: 0;
+  font-size: clamp(32px, 2.490208cqw, 64px);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.product-v3__purchase-track {
+  position: absolute;
+  z-index: 2;
+  top: 58px;
+  right: var(--page-gutter);
+  bottom: var(--product-v3-faq-gap);
+  width: var(--product-v3-purchase-width);
+  pointer-events: none;
+}
+
+.product-v3__gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 2.708333cqw;
+  width: var(--product-v3-gallery-width);
+  margin: 12.1875cqw 0 0 var(--product-v3-gallery-left);
+}
+
+.product-v3__photo {
+  position: relative;
+  aspect-ratio: 919 / 1128;
+  margin: 0;
+}
+
+.product-v3__photo-mask,
+.product-v3__photo-parallax {
+  position: absolute;
+  inset: 0;
+}
+
+.product-v3__photo-mask {
+  overflow: hidden;
+}
+
+.product-v3__photo-parallax > img {
+  position: absolute;
+  top: -18%;
+  left: 0;
+  width: 100%;
+  height: 136%;
+  object-fit: cover;
+}
+
+.product-v3__photo--side img {
+  width: 131.33%;
+  height: 136%;
+  left: -15.66%;
+  top: -18.415%;
+  transform: scaleX(-1);
+}
+
+.product-v3__faq {
+  width: calc(var(--product-v3-gallery-width) + 1px);
+  margin: 9.114583cqw 0 0 var(--product-v3-gallery-left);
+}
+
+.product-v3__faq > h2,
+.product-v3__arrivals > h2 {
+  margin: 0;
+  color: var(--palette-terracotta);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.product-v3__faq .product-question h3 { color: var(--palette-indigo); }
+
+.product-v3__arrivals { overflow: hidden; }
+.product-v3__arrivals > h2 {
+  margin: 0 var(--page-gutter) 56px;
+  line-height: 18px;
+}
+.product-v3__arrivals .arrival-card__caption h3,
+.product-v3__arrivals .arrival-card__number { font-size: 20px; }
+.product-v3__arrivals .arrival-card__caption p { font-size: 16px; }
+.product-v3__arrivals .arrival-card__caption--rest p { margin-top: 12px; }
+
+.product-v3 + .site-footer {
+  padding-top: 15.104167cqw;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 1599px) {
+  .product-v3__arrivals .arrival-card__caption h3 { font-size: 18px; }
+}
+
+@media (max-width: 1279px) {
+  .product-v3 {
+    --product-v3-gallery-left: var(--page-gutter);
+    --product-v3-gallery-width: calc(100cqw - var(--product-v3-purchase-width) - 3 * var(--page-gutter));
+  }
+
+  .product-v3__hero h1 { left: var(--page-gutter); }
+  .product-v3__arrivals .arrival-card__caption--rest h3 { line-height: 21px; }
+}

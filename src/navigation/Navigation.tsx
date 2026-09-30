@@ -43,7 +43,7 @@ export function isHome(pathname: string) {
 }
 
 function isRoute(pathname: string) {
-  return isHome(pathname) || routePath(pathname) === '/product/barelyef'
+  return isHome(pathname) || ['/product/barelyef', '/product/barelyef-new', '/product/barelyef-v3'].includes(routePath(pathname) ?? '')
 }
 
 function samePage(a: Pick<Location, 'pathname' | 'search'>, b: Pick<Location, 'pathname' | 'search'>) {

@@ -6,6 +6,21 @@ import './SectionCursor.css'
 
 type Point = { x: number; y: number }
 
+const INTERACTIVE_SELECTOR = [
+  'a[href]', 'button', 'input', 'select', 'textarea', 'label[for]',
+  '[role="button"]', '[role="link"]', '[role="checkbox"]', '[role="radio"]',
+  '[role="switch"]', '[role="slider"]', '[role="tab"]',
+  '[contenteditable]:not([contenteditable="false"])', '[data-cursor="pointer"]',
+].join(', ')
+
+function regionsTouch(first: Element, second: Element) {
+  const a = first.getBoundingClientRect()
+  const b = second.getBoundingClientRect()
+  // Allow fractional layout rounding at a shared section edge.
+  return a.right >= b.left - 1 && a.left <= b.right + 1 &&
+    a.bottom >= b.top - 1 && a.top <= b.bottom + 1
+}
+
 function findExit(region: Element, from: Point, to: Point): Point {
   const dx = to.x - from.x
   const dy = to.y - from.y
@@ -47,7 +62,7 @@ export function SectionCursor({ scope }: { scope: RefObject<HTMLElement | null> 
     const color = getComputedStyle(document.documentElement).getPropertyValue('--palette-bluish-grey').trim()
     const line = new CursorLineEffect(lineElement, { strokeStyle: /^#[\da-f]{6}$/i.test(color) ? color : '#8ca0b4' })
     const dot = new CursorPointEffect(pointElement, {
-      pointerSelector: 'a[href], button, [role="button"], [data-cursor="pointer"]',
+      pointerSelector: INTERACTIVE_SELECTOR,
       dragSelector: ':not(*)',
     })
     const fine = matchMedia(FINE_POINTER_QUERY)
@@ -69,9 +84,9 @@ export function SectionCursor({ scope }: { scope: RefObject<HTMLElement | null> 
       line.stop()
       dot.stop()
     }
-    const release = () => {
+    const release = (target?: Point) => {
       if (!activeRegion || !input || !lastInside) return
-      const exit = findExit(activeRegion,
+      const exit = target ?? findExit(activeRegion,
         { x: lastInside.x - scrollX, y: lastInside.y - scrollY },
         { x: input.clientX, y: input.clientY })
       activeRegion = null
@@ -94,21 +109,25 @@ export function SectionCursor({ scope }: { scope: RefObject<HTMLElement | null> 
         return
       }
 
-      if (!inside) {
+      if (!inside || target?.closest(INTERACTIVE_SELECTOR)) {
         line.handleScroll(deltaX, deltaY)
-        release()
+        // Both control hover and section exit retire the existing canvas trail.
+        release(inside && region === activeRegion ? { x: input.clientX, y: input.clientY } : undefined)
         return
       }
 
       if (activeRegion !== region) {
-        // A direct scroll jump between sections starts a fresh local trail.
-        if (trailRegion !== region) stop()
+        // Crossing directly between enabled sections keeps the live trail and dot.
+        const continuing = activeRegion !== null && regionsTouch(activeRegion, region)
+        if (!continuing && trailRegion !== region) stop()
         else line.handleScroll(deltaX, deltaY)
         activeRegion = region
         trailRegion = region
         lineElement.dataset.cursorRegion = 'active'
-        line.start()
-        dot.start()
+        if (!continuing) {
+          line.start()
+          dot.start()
+        }
         // Scroll can move a section under a stationary mouse without pointermove.
         const current = { ...input, target }
         line.handlePointer(current)
@@ -139,7 +158,7 @@ export function SectionCursor({ scope }: { scope: RefObject<HTMLElement | null> 
     const onVisibility = () => { if (document.hidden) onLeave() }
 
     // Capture enables/disables the original effects before their mouse listeners run.
-    const pointerEvents = ['pointermove', 'pointerdown', 'pointerup'] as const
+    const pointerEvents = ['pointerover', 'pointermove', 'pointerdown', 'pointerup'] as const
     pointerEvents.forEach((name) => window.addEventListener(name, onPointer, { capture: true, passive: true }))
     window.addEventListener('pointerout', onOut)
     window.addEventListener('blur', onLeave)

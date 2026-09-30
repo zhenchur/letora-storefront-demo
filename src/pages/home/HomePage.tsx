@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Hero } from '../../components/Hero'
 import { SiteHeader } from '../../components/SiteHeader'
 import { SiteFooter } from '../../components/SiteFooter'
 import { HomeContent } from './HomeContent'
+import { SectionCursor } from '../../motion/SectionCursor/SectionCursor'
 
 export function HomePage() {
+  const pageRef = useRef<HTMLElement>(null)
   const heroRef = useRef<HTMLElement>(null)
   const [showHeader, setShowHeader] = useState(false)
 
@@ -25,11 +28,12 @@ export function HomePage() {
   return (
     <>
       {showHeader && <SiteHeader tone="light" fixed motion />}
-      <main>
+      <main ref={pageRef}>
         <Hero sectionRef={heroRef} />
         <HomeContent />
       </main>
-      <SiteFooter motion />
+      <SiteFooter motion variant="home" />
+      {createPortal(<SectionCursor scope={pageRef} />, document.body)}
     </>
   )
 }

@@ -72,3 +72,31 @@
   gap: clamp(12px, calc(9.6875vw - 112px), 74px);
   transform: translateX(-50%);
 }
+
+.site-header--product {
+  position: absolute;
+  color: var(--palette-white);
+  background: transparent;
+}
+
+.site-header--product .site-header__categories {
+  left: 18.0208333333%;
+  justify-content: space-between;
+  width: 41.5625%;
+  gap: 0;
+  transform: none;
+}
+
+.site-header--product .site-header__categories .site-header__action {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+@media (max-width: 1279px) {
+  .site-header--product .site-header__categories .site-header__action {
+    font-size: 16px;
+  }
+}

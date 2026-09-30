@@ -11,7 +11,13 @@ const [o, le, a, t, r, counter] = outline.match(/M[^M]+/g)!
 const letters = [le, le, t, o, r + counter, a + bar]
 const join = 335.284
 
-export function FooterWordmark({ motion }: { motion: boolean }) {
+type FooterWordmarkProps = {
+  motion: boolean
+  src?: string
+  fill?: string
+}
+
+export function FooterWordmark({ motion, src = wordmark, fill = '#8CA0B4' }: FooterWordmarkProps) {
   const root = useRef<HTMLDivElement>(null)
   const shown = useRef(false)
   const clipId = useId().replace(/:/g, '')
@@ -64,16 +70,16 @@ export function FooterWordmark({ motion }: { motion: boolean }) {
     }, element)
 
     return () => media.revert()
-  }, { scope: root, dependencies: [motion, ready], revertOnUpdate: true })
+  }, { scope: root, dependencies: [motion, ready, src], revertOnUpdate: true })
 
   return (
     <div className="site-footer__wordmark" ref={root} role="img" aria-label="Летора">
-      <img src={wordmark} width={1851.344} height={391} alt="" aria-hidden="true" />
+      <img src={src} width={1851.344} height={391} alt="" aria-hidden="true" />
       {motion && (
         <span className="footer-wordmark-letters" aria-hidden="true">
           {letters.map((path, index) => (
             <span className="footer-wordmark-letter" key={index}>
-              <svg viewBox="0 0 1851.34 391" preserveAspectRatio="none" fill="#8CA0B4" focusable="false">
+              <svg viewBox="0 0 1851.34 391" preserveAspectRatio="none" fill={fill} focusable="false">
                 {index < 2 && (
                   <defs>
                     <clipPath id={`${clipId}-${index}`} clipPathUnits="userSpaceOnUse">

@@ -1,5 +1,6 @@
 import { Children, cloneElement, isValidElement, useRef, type ReactElement, type ReactNode } from 'react'
 import { gsap, useGSAP } from './gsap'
+import { createCharacterRevealVars } from './characterReveal'
 import './HoverText.css'
 
 type InlineElement = ReactElement<{ children?: ReactNode }>
@@ -52,7 +53,7 @@ function splitLabel(children: ReactNode) {
   return { visual, text }
 }
 
-export function HoverText({ children }: { children: ReactNode }) {
+export function HoverText({ children, settleOnLeave = false }: { children: ReactNode; settleOnLeave?: boolean }) {
   const label = useRef<HTMLSpanElement>(null)
   const { visual, text } = splitLabel(children)
 
@@ -65,20 +66,16 @@ export function HoverText({ children }: { children: ReactNode }) {
     const media = gsap.matchMedia()
 
     media.add('(prefers-reduced-motion: no-preference)', (context) => {
+      let revealTween: gsap.core.Tween | undefined
       const playReveal = context.add('playReveal', () => {
+        revealTween?.kill()
         gsap.killTweensOf(characters)
-        gsap.fromTo(characters, {
-          autoAlpha: 0,
-          filter: 'blur(6px)',
-          willChange: 'opacity, filter',
-        }, {
-          autoAlpha: 1,
-          filter: 'blur(0px)',
-          duration: 0.6,
-          ease: 'quart.out',
-          stagger: (index, character: HTMLElement) => Number(character.dataset.hoverIndex ?? index) * 0.028,
+        const { from, to } = createCharacterRevealVars()
+        revealTween = gsap.fromTo(characters, from, {
+          ...to,
+          stagger: (index, character: HTMLElement) => Number(character.dataset.hoverIndex ?? index) * to.stagger,
           overwrite: true,
-          clearProps: 'filter,opacity,visibility,willChange',
+          lazy: !settleOnLeave,
         })
       })
 
@@ -88,13 +85,9 @@ export function HoverText({ children }: { children: ReactNode }) {
       const onFocus = () => {
         if (trigger.matches(':focus-visible')) playReveal()
       }
-
-      trigger.addEventListener('pointerenter', onPointerEnter)
-      trigger.addEventListener('focus', onFocus)
-
-      return () => {
-        trigger.removeEventListener('pointerenter', onPointerEnter)
-        trigger.removeEventListener('focus', onFocus)
+      const settle = () => {
+        revealTween?.kill()
+        revealTween = undefined
         gsap.killTweensOf(characters)
         characters.forEach((character) => {
           for (const property of ['filter', 'opacity', 'visibility', 'will-change']) {
@@ -102,10 +95,27 @@ export function HoverText({ children }: { children: ReactNode }) {
           }
         })
       }
+
+      trigger.addEventListener('pointerenter', onPointerEnter)
+      trigger.addEventListener('focus', onFocus)
+      if (settleOnLeave) {
+        trigger.addEventListener('pointerleave', settle)
+        trigger.addEventListener('blur', settle)
+      }
+
+      return () => {
+        trigger.removeEventListener('pointerenter', onPointerEnter)
+        trigger.removeEventListener('focus', onFocus)
+        if (settleOnLeave) {
+          trigger.removeEventListener('pointerleave', settle)
+          trigger.removeEventListener('blur', settle)
+        }
+        settle()
+      }
     }, element)
 
     return () => media.revert()
-  }, { scope: label, dependencies: [children], revertOnUpdate: true })
+  }, { scope: label, dependencies: [children, settleOnLeave], revertOnUpdate: true })
 
   return (
     <span className="hover-text" ref={label}>

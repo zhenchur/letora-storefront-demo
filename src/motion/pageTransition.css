@@ -19,6 +19,8 @@ html[data-site-loading] .page-backdrop {
 /* The backdrop owns the page fill while the foreground fades independently. */
 .site-shell:not([data-page-transition='idle']) .product,
 .site-shell:not([data-page-transition='idle']) .hero,
+.site-shell:not([data-page-transition='idle']) .editorial-product-page,
+.site-shell:not([data-page-transition='idle']) .editorial-product,
 .site-shell:not([data-page-transition='idle']) .site-header--light {
   background: transparent;
 }

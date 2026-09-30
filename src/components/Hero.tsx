@@ -1,10 +1,11 @@
 import { useRef, type RefObject } from 'react'
 import arrow from '../assets/icons/chevron-right.svg'
 import previous from '../assets/icons/chevron-previous.svg'
-import detail from '../assets/icons/hero-detail.svg'
-import { heroCategories, heroSlides } from '../data/hero'
+import actionArrow from '../assets/home-refresh/hero-action.svg'
+import { heroCategories, heroMenuModels, heroSlides } from '../data/hero'
 import { SiteHeader } from './SiteHeader'
 import { HeroMenuLabel } from './HeroMenu/HeroMenuLabel'
+import { useHeroMenu } from './HeroMenu/useHeroMenu'
 import { useHeroIntro } from '../motion/useHeroIntro'
 import { useHeroSlider } from '../motion/useHeroSlider'
 import { HoverText } from '../motion/HoverText'
@@ -19,6 +20,7 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
   const { activeIndex, transitioning, paused, autoplayEnabled, next, previous: goPrevious, togglePause } =
     useHeroSlider(sectionRef, ready, heroSlides.length)
   useTextMotion(categoriesRef)
+  useHeroMenu(sectionRef, ready)
 
   return (
     <section
@@ -26,6 +28,7 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
       aria-roledescription="карусель"
       aria-labelledby={`collection-title-${heroSlides[activeIndex].id}`}
       ref={sectionRef}
+      data-line-cursor
     >
       <div className="hero__media" aria-hidden="true" ref={mediaRef}>
         {heroSlides.map((slide, index) => (
@@ -51,6 +54,7 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
           <button
             className={`hero__category hero__category--${id}`}
             key={id}
+            data-category={id}
             type="button"
             aria-disabled="true"
           >
@@ -61,10 +65,20 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
         ))}
       </nav>
 
-      <img className="hero__detail" src={detail} width={2} height={2.13489} alt="" />
+      <div className="hero-menu-models" aria-hidden="true">
+        {heroMenuModels.map(({ category, names }) => (
+          <div className="hero-menu-models__group" data-menu-category={category} key={category}>
+            {names.map((name, index) => (
+              <span className={`hero-menu-models__name hero-menu-models__name--${index}`} key={name}>
+                <span className="hero-menu-models__text">{name}</span>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
 
       <div className="hero__slider" role="group" aria-label="Управление слайдером">
-        <button type="button" disabled={!ready || transitioning} onClick={goPrevious} aria-label="Предыдущий слайд">
+        <button className="hero__step hero__step--previous" type="button" disabled={!ready || transitioning} onClick={goPrevious} aria-label="Предыдущий слайд">
           <ArrowHover className="hero__previous" src={previous} />
         </button>
         <button
@@ -80,7 +94,7 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
             <span className="hero__progress" />
           </span>
         </button>
-        <button type="button" disabled={!ready || transitioning} onClick={next} aria-label="Следующий слайд">
+        <button className="hero__step hero__step--next" type="button" disabled={!ready || transitioning} onClick={next} aria-label="Следующий слайд">
           <ArrowHover src={arrow} />
         </button>
       </div>
@@ -94,15 +108,15 @@ export function Hero({ sectionRef }: { sectionRef: RefObject<HTMLElement | null>
             aria-hidden={index !== activeIndex}
             inert={index !== activeIndex}
           >
-            <p className="hero__eyebrow" data-text-reveal="copy">{slide.eyebrow}</p>
-            <h1 className="hero__title" id={`collection-title-${slide.id}`} data-text-reveal="copy">
+            <p className="hero__eyebrow" data-text-reveal="copy"><em>{slide.eyebrowEmphasis}</em>{slide.eyebrow.slice(slide.eyebrowEmphasis.length)}</p>
+            <h1 className="hero__title" id={`collection-title-${slide.id}`} data-text-reveal="lines">
               {slide.title[0]}
               <br />
               {slide.title[1]}
             </h1>
             <button className="hero__action" type="button" aria-disabled="true" data-text-reveal="block">
               <HoverText>{slide.action}</HoverText>
-              <ArrowHover src={arrow} />
+              <ArrowHover src={actionArrow} width={6} height={10} />
             </button>
           </div>
         ))}

@@ -29,6 +29,10 @@ const MAX_CANVAS_PIXELS = 8_388_608;
 const MAX_CANVAS_DIMENSION = 8192;
 const IDLE_MOVEMENT_EPSILON = 0.01;
 const IDLE_DELAY_MS = 200;
+const RELEASE_RAMP_MS = 120;
+const RELEASE_START_SPEED = 2;
+const RELEASE_MAX_SPEED = 8;
+const MAX_RELEASE_DELTA_MS = 50;
 const POINT_POSITION_EASE = 0.32;
 const REFERENCE_FRAME_MS = 1000 / 60;
 const INTERACTION_REFRESH_MS = 80;
@@ -42,6 +46,12 @@ const POINTER_TARGET_SELECTOR = [
   '[data-cursor="pointer"]:not([aria-disabled="true"])',
 ].join(", ");
 const DRAG_TARGET_SELECTOR = '[data-cursor="drag"]';
+function releasePhysicsTime(elapsed) {
+  const ramp = Math.min(elapsed, RELEASE_RAMP_MS);
+  return RELEASE_START_SPEED * elapsed + (RELEASE_MAX_SPEED - RELEASE_START_SPEED) *
+    (ramp * ramp / (2 * RELEASE_RAMP_MS) + Math.max(0, elapsed - RELEASE_RAMP_MS));
+}
+
 function parseHexColor(hexColor) {
   return {
     red: Number.parseInt(hexColor.slice(1, 3), 16),
@@ -92,6 +102,9 @@ class CursorLineEffect {
     this.resizeFrameId = null;
     this.isStarted = false;
     this.isReleasing = false;
+    this.releaseLastTimestamp = null;
+    this.releaseElapsed = 0;
+    this.releaseAccumulator = 0;
     this.isRunning = false;
     this.isIdle = false;
     this.isCanvasReady = false;
@@ -351,6 +364,12 @@ class CursorLineEffect {
 
     this.rawPointer.x = x;
     this.rawPointer.y = y;
+    if (!this.isReleasing) {
+      this.releaseLastTimestamp = performance.now();
+      this.releaseElapsed = 0;
+      // Always run an ordinary first step, even if the next RAF is very close.
+      this.releaseAccumulator = REFERENCE_FRAME_MS;
+    }
     this.isReleasing = true;
     this.markActive();
     this.wake();
@@ -519,6 +538,9 @@ class CursorLineEffect {
 
     this.isStarted = true;
     this.isReleasing = false;
+    this.releaseLastTimestamp = null;
+    this.releaseElapsed = 0;
+    this.releaseAccumulator = 0;
 
     if (
       this.viewport.width !== window.innerWidth ||
@@ -555,6 +577,9 @@ class CursorLineEffect {
 
     this.isStarted = false;
     this.isReleasing = false;
+    this.releaseLastTimestamp = null;
+    this.releaseElapsed = 0;
+    this.releaseAccumulator = 0;
     this.isIdle = false;
     this.pauseAnimation(clearCanvas);
 
@@ -595,8 +620,6 @@ class CursorLineEffect {
       return;
     }
 
-    const { spring, friction, headSpringFactor, pointerEase } = this.params;
-
     this.context.clearRect(
       0,
       0,
@@ -604,6 +627,47 @@ class CursorLineEffect {
       this.viewport.height,
     );
 
+    let maximumMovementSquared = Infinity;
+    if (this.isReleasing) {
+      const delta = Math.min(MAX_RELEASE_DELTA_MS, Math.max(0,
+        timestamp - this.releaseLastTimestamp));
+      this.releaseLastTimestamp = timestamp;
+      const elapsed = this.releaseElapsed + delta;
+      this.releaseAccumulator += releasePhysicsTime(elapsed) - releasePhysicsTime(this.releaseElapsed);
+      this.releaseElapsed = elapsed;
+      while (this.releaseAccumulator >= REFERENCE_FRAME_MS) {
+        maximumMovementSquared = this.stepPhysics();
+        this.releaseAccumulator -= REFERENCE_FRAME_MS;
+        if (this.hasSettledMotion(maximumMovementSquared)) {
+          this.stop();
+          return;
+        }
+      }
+    } else {
+      // Preserve the original motion: exactly one physics step per active RAF.
+      maximumMovementSquared = this.stepPhysics();
+    }
+    this.drawSmoothTrail();
+
+    if (this.hasSettledMotion(maximumMovementSquared)) {
+      if (this.idleStartedAt === null) {
+        this.idleStartedAt = timestamp;
+      } else if (timestamp - this.idleStartedAt >= IDLE_DELAY_MS) {
+        this.isRunning = false;
+        this.isIdle = true;
+        this.idleStartedAt = null;
+        this.setState("idle");
+        return;
+      }
+    } else {
+      this.idleStartedAt = null;
+    }
+
+    this.frameId = window.requestAnimationFrame(this.render);
+  }
+
+  stepPhysics() {
+    const { spring, friction, headSpringFactor, pointerEase } = this.params;
     this.pointer.x += (this.rawPointer.x - this.pointer.x) * pointerEase;
     this.pointer.y += (this.rawPointer.y - this.pointer.y) * pointerEase;
 
@@ -620,36 +684,16 @@ class CursorLineEffect {
       point.y += point.dy;
     }
 
-    const maximumMovementSquared = this.updateRenderTrail();
-    this.drawSmoothTrail();
+    return this.updateRenderTrail();
+  }
 
-    const hasSettledMotion =
-      maximumMovementSquared <= IDLE_MOVEMENT_EPSILON ** 2 &&
+  hasSettledMotion(maximumMovementSquared) {
+    return maximumMovementSquared <= IDLE_MOVEMENT_EPSILON ** 2 &&
       (
-        friction === 0 ||
+        this.params.friction === 0 ||
         this.getMaximumResidualSquared() <=
           IDLE_MOVEMENT_EPSILON ** 2
       );
-
-    if (hasSettledMotion) {
-      if (this.idleStartedAt === null) {
-        this.idleStartedAt = timestamp;
-      } else if (timestamp - this.idleStartedAt >= IDLE_DELAY_MS) {
-        if (this.isReleasing) {
-          this.stop();
-          return;
-        }
-        this.isRunning = false;
-        this.isIdle = true;
-        this.idleStartedAt = null;
-        this.setState("idle");
-        return;
-      }
-    } else {
-      this.idleStartedAt = null;
-    }
-
-    this.frameId = window.requestAnimationFrame(this.render);
   }
 
   updateRenderTrail() {
@@ -908,6 +952,10 @@ class CursorLineEffect {
 
     this.isDestroyed = true;
     this.isStarted = false;
+    this.isReleasing = false;
+    this.releaseLastTimestamp = null;
+    this.releaseElapsed = 0;
+    this.releaseAccumulator = 0;
     this.isIdle = false;
     this.pauseAnimation(true);
 

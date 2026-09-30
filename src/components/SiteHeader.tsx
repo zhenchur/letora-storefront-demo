@@ -10,11 +10,13 @@ import { siteUrl } from '../navigation/paths'
 import './SiteHeader.css'
 
 type SiteHeaderProps = {
+  variant?: 'default' | 'product'
   tone?: 'overlay' | 'light'
   fixed?: boolean
   motion?: boolean
   entranceAfter?: string
   entranceAt?: 'start' | 'complete'
+  accountIcon?: string
 }
 
 const actions = [
@@ -25,16 +27,16 @@ const actions = [
 
 const categories = ['Платья', 'Юбки', 'Брюки', 'Верхняя одежда', 'Топы', 'Блузы']
 
-export function SiteHeader({ tone = 'overlay', fixed = false, motion = false, entranceAfter, entranceAt }: SiteHeaderProps) {
+export function SiteHeader({ variant = 'default', tone = 'overlay', fixed = false, motion = false, entranceAfter, entranceAt, accountIcon = account }: SiteHeaderProps) {
   const header = useRef<HTMLElement>(null)
   useTextMotion(header, motion)
 
   return (
-    <header ref={header} data-text-after={entranceAfter} data-text-at={entranceAt} className={`site-header site-header--${tone}${fixed ? ' site-header--fixed' : ''}`}>
+    <header ref={header} data-text-after={entranceAfter} data-text-at={entranceAt} className={`site-header site-header--${tone}${fixed ? ' site-header--fixed' : ''}${variant === 'product' ? ' site-header--product' : ''}`}>
       <a className="site-header__brand" href={siteUrl()} aria-label="Летора — главная" data-text-reveal={motion && entranceAfter ? 'block' : undefined}>
         <AssetIcon src={logo} className="site-header__logo" />
       </a>
-      {tone === 'light' && (
+      {(tone === 'light' || variant === 'product') && (
         <nav className="site-header__categories" aria-label="Категории одежды">
           {categories.map((label, index) => (
             <button
@@ -62,7 +64,7 @@ export function SiteHeader({ tone = 'overlay', fixed = false, motion = false, en
             data-text-delay={motion ? index * 0.08 : undefined}
             key={label}
           >
-            <AssetIcon src={icon} />
+            <AssetIcon src={icon === account ? accountIcon : icon} />
             {motion ? <HoverText>{label}</HoverText> : <span>{label}</span>}
           </button>
         ))}

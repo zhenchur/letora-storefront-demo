@@ -7,15 +7,15 @@ export const TEXT_EXIT_MOTION = {
   stagger: 0.08,
 } as const
 
-// Display text and controls share a small lift; running copy keeps its line motion.
-export function createTextRevealVars({ bodyCopy = false }: { bodyCopy?: boolean } = {}) {
+// Display text keeps a small lift; headings may opt into the promo's gentle tilt.
+export function createTextRevealVars({ bodyCopy = false, tilt = false }: { bodyCopy?: boolean; tilt?: boolean } = {}) {
   return {
     from: {
       autoAlpha: 0,
       filter: 'blur(6px)',
       y: bodyCopy ? 0 : 22,
       yPercent: bodyCopy ? 125 : 0,
-      rotation: bodyCopy ? 3 : 0,
+      rotation: bodyCopy || tilt ? 3 : 0,
       transformOrigin: '0% 100%',
       willChange: 'transform, opacity, filter',
     },

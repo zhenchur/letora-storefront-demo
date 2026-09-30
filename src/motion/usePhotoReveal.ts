@@ -3,13 +3,13 @@ import { gsap, ScrollTrigger, useGSAP } from './gsap'
 import { useSiteReady } from './SiteIntro'
 import { PHOTO_REVEAL_START, PHOTO_REVEAL_COMPLETE, PHOTO_REVEAL_DURATION, PHOTO_REVEAL_EASE, setPhotoMask, waitForPhoto } from './photoReveal'
 
-export function usePhotoReveal(scope: RefObject<HTMLElement | null>, enabled = true) {
+export function usePhotoReveal(scope: RefObject<HTMLElement | null>, enabled = true, selector = 'img[data-photo-reveal]') {
   const ready = useSiteReady()
   const shown = useRef(new WeakSet<HTMLImageElement>())
 
   useGSAP(() => {
     if (!scope.current) return
-    const images = Array.from(scope.current.querySelectorAll<HTMLImageElement>('img[data-photo-reveal]'))
+    const images = Array.from(scope.current.querySelectorAll<HTMLImageElement>(selector))
     const complete = (image: HTMLImageElement) => {
       shown.current.add(image)
       image.dataset.photoState = 'complete'
@@ -117,5 +117,5 @@ export function usePhotoReveal(scope: RefObject<HTMLElement | null>, enabled = t
       media.revert()
       images.forEach((image) => { delete image.dataset.photoState })
     }
-  }, { scope, dependencies: [ready, enabled], revertOnUpdate: true })
+  }, { scope, dependencies: [ready, enabled, selector], revertOnUpdate: true })
 }

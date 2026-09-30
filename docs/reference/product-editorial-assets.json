@@ -1,0 +1,82 @@
+{
+  "figma": {
+    "fileKey": "j1cOxgS2tGUfkq1AeQwrEH",
+    "frame": "1138:907",
+    "size": [
+      1920,
+      6056
+    ]
+  },
+  "assets": [
+    {
+      "file": "hero.png",
+      "nodeId": "1138:908",
+      "sizeBytes": 2951682,
+      "effectiveSize": [
+        1920,
+        896
+      ],
+      "note": "Figma export includes the frame clipping and dark overlay."
+    },
+    {
+      "file": "gallery-large.png",
+      "nodeId": "1145:1151",
+      "sizeBytes": 2141041,
+      "alsoUsedBy": [
+        "1147:1402"
+      ]
+    },
+    {
+      "file": "gallery-small.png",
+      "nodeId": "1147:1398",
+      "sizeBytes": 520596,
+      "alsoUsedBy": [
+        "1147:1401",
+        "1147:1403"
+      ]
+    },
+    {
+      "file": "new-bomber.png",
+      "nodeId": "1138:998",
+      "sizeBytes": 647052
+    },
+    {
+      "file": "new-knit.png",
+      "nodeId": "1138:1002",
+      "sizeBytes": 944069
+    },
+    {
+      "file": "new-jacket.png",
+      "nodeId": "1138:1004",
+      "sizeBytes": 748959
+    },
+    {
+      "file": "new-peek.png",
+      "nodeId": "1138:1013",
+      "sizeBytes": 11732,
+      "effectiveSize": [
+        12,
+        746
+      ],
+      "note": "Only the 12px strip inside the frame is visible."
+    }
+  ],
+  "icons": [
+    {
+      "file": "tab-dot.svg",
+      "nodeId": "1139:1133",
+      "size": [
+        6,
+        6
+      ]
+    },
+    {
+      "file": "option-arrow.svg",
+      "nodeId": "1139:1142",
+      "size": [
+        16,
+        16
+      ]
+    }
+  ]
+}

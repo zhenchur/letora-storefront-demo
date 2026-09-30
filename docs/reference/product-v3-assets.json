@@ -1,0 +1,281 @@
+{
+  "figma": {
+    "fileKey": "j1cOxgS2tGUfkq1AeQwrEH",
+    "frame": "1172:2209",
+    "referenceWidth": 1920,
+    "designContext": ".codex-qa/product-v3-design-context.txt"
+  },
+  "assets": [
+    {
+      "id": "knit-front",
+      "sourceAsset": "22ea6.png",
+      "file": "src/assets/home-refresh/new-puffer.png",
+      "delivery": "vite-import",
+      "reused": true,
+      "format": "jpeg",
+      "width": 2507,
+      "height": 3761,
+      "sizeBytes": 3506733,
+      "sha256": "2aace2c85a5ea29a7bf27ef27ab43dcc9c6725466ae22173b63a48256ec40c29",
+      "note": "The new Figma download is byte-identical to the existing file. Its .png filename contains JPEG data."
+    },
+    {
+      "id": "knit-side",
+      "sourceAsset": "1cd91.png",
+      "file": "public/assets/product-v3/knit-side.png",
+      "src": "assets/product-v3/knit-side.png",
+      "delivery": "siteUrl",
+      "reused": false,
+      "format": "png",
+      "width": 3587,
+      "height": 3761,
+      "sizeBytes": 14499553,
+      "sha256": "f7c0ccd272b80c590d977cf3feb5d0dd53dba293ad766b68cac51e2039b9a8cf",
+      "note": "Original Figma source, saved without resampling, mirroring, cropping, or compression."
+    },
+    {
+      "id": "knit-back",
+      "sourceAsset": "fb427.png",
+      "file": "public/assets/product-v3/knit-back.jpg",
+      "src": "assets/product-v3/knit-back.jpg",
+      "delivery": "siteUrl",
+      "reused": false,
+      "format": "jpeg",
+      "width": 2507,
+      "height": 3761,
+      "sizeBytes": 3438001,
+      "sha256": "a52522f4226c061275493182de0db22bcb8620cd5df4e2219506cc6304712f50",
+      "note": "Original Figma source; .jpg matches its actual JPEG format."
+    },
+    {
+      "id": "arrival-bomber",
+      "sourceAsset": "ad474.png",
+      "file": "src/assets/home-refresh/new-bomber.png",
+      "delivery": "vite-import",
+      "reused": true,
+      "format": "jpeg",
+      "width": 2507,
+      "height": 3761,
+      "sizeBytes": 2309365,
+      "sha256": "c54ba6f128ceb862d397e929c3dd8a7fcfafa5d5fc65f6766069223a5c45039f",
+      "note": "Byte-identical to the new Figma source. The older src/assets/home/new-bomber.jpg is not this exact source file."
+    },
+    {
+      "id": "arrival-jacket",
+      "sourceAsset": "d2051.png",
+      "file": "src/assets/home-refresh/new-jacket.png",
+      "delivery": "vite-import",
+      "reused": true,
+      "format": "jpeg",
+      "width": 2507,
+      "height": 3761,
+      "sizeBytes": 2509401,
+      "sha256": "367f45891824e6fd8f0116592241471dc79ceefcf9054c4b8a2cae8a33c01c1f"
+    },
+    {
+      "id": "arrival-scarf",
+      "sourceAsset": "08897.png",
+      "file": "src/assets/home/new-peek.jpg",
+      "delivery": "vite-import",
+      "reused": true,
+      "format": "jpeg",
+      "width": 1333,
+      "height": 2000,
+      "sizeBytes": 744732,
+      "sha256": "52b23e661712f1b20e6f2f0d10fa73bfb2a65929ceec51609042fe0fe5952e58"
+    },
+    {
+      "id": "option-arrow",
+      "sourceAsset": "4c4b8.svg",
+      "file": "public/assets/product-editorial/option-arrow.svg",
+      "src": "assets/product-editorial/option-arrow.svg",
+      "delivery": "siteUrl",
+      "reused": true,
+      "format": "svg",
+      "width": 16,
+      "height": 16,
+      "sizeBytes": 344,
+      "sha256": "a019200194232693171228fb9374f34b2a85703f22a997698673e3a3c89fe910",
+      "note": "Exact right-chevron shape and size. Figma nodes 1181:3142 and 1181:3146 use it without rotation."
+    },
+    {
+      "id": "tab-dot",
+      "sourceAsset": "b4b44.svg",
+      "file": "public/assets/product-editorial/tab-dot.svg",
+      "src": "assets/product-editorial/tab-dot.svg",
+      "delivery": "siteUrl",
+      "reused": true,
+      "format": "svg",
+      "width": 6,
+      "height": 6,
+      "sizeBytes": 231,
+      "sha256": "2a669fa3fcd33ee48673b68de122dfa0ace361f379690db913784e89dfcfa2e7",
+      "note": "Exact 6px circle: cx=3, cy=3, r=3, fill=#37557D."
+    },
+    {
+      "id": "header-account",
+      "sourceAsset": "40b4c.svg",
+      "file": "public/assets/product-v3/account.svg",
+      "src": "assets/product-v3/account.svg",
+      "delivery": "siteUrl",
+      "reused": false,
+      "format": "svg",
+      "width": 16,
+      "height": 16,
+      "sizeBytes": 474,
+      "sha256": "ec0c4681ea39376ea7bed6134775b5b342705f15683830b35a2a0258b681f326",
+      "note": "Exact new Figma source; the older src/assets/icons/account.svg has a different visible silhouette. Existing assets were left unchanged."
+    }
+  ],
+  "slots": [
+    {
+      "id": "hero",
+      "nodeId": "1181:3059",
+      "asset": "knit-front",
+      "frameAtReferenceWidth": { "x": -31, "y": 0, "width": 1951, "height": 896 },
+      "frameOverflow": "hidden",
+      "imageCss": { "position": "absolute", "width": "100%", "height": "326.66%", "left": "0", "top": "-96.2%", "maxWidth": "none" },
+      "overlay": { "color": "#000000", "opacity": 0.4 },
+      "note": "The source image is the top opaque photo layer. The hero frame extends 31px left of the 1920px page. Apply the dark overlay in CSS once; the reused source itself is not darkened."
+    },
+    {
+      "id": "gallery-side",
+      "nodeId": "1172:2237",
+      "asset": "knit-side",
+      "frameAtReferenceWidth": { "x": 219, "y": 1130, "width": 919, "height": 1128 },
+      "frameOverflow": "hidden",
+      "imageCss": { "position": "absolute", "width": "131.33%", "height": "112.19%", "left": "-15.66%", "top": "-6.51%", "maxWidth": "none" },
+      "frameTransform": "scaleX(-1)",
+      "transformOrigin": "50% 50%",
+      "note": "Mirror the whole cropped frame. This is equivalent to Figma's scaleY(-1) plus rotate(180deg); applying scaleX only to the source image would reverse the authored crop offsets."
+    },
+    {
+      "id": "gallery-front",
+      "nodeId": "1172:2210",
+      "asset": "knit-front",
+      "frameAtReferenceWidth": { "x": 219, "y": 2310, "width": 919, "height": 1128 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "note": "22ea6.png is the top visible layer; older photo fills underneath are fully covered."
+    },
+    {
+      "id": "gallery-back",
+      "nodeId": "1172:2238",
+      "asset": "knit-back",
+      "frameAtReferenceWidth": { "x": 219, "y": 3490, "width": 919, "height": 1128 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "note": "fb427.png is the top visible layer; front and earlier photo fills underneath are fully covered."
+    },
+    {
+      "id": "arrival-1",
+      "nodeId": "1181:2920",
+      "asset": "arrival-bomber",
+      "frameSizeAtReferenceWidth": { "width": 608, "height": 746 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "hoverOverlay": { "color": "#000000", "opacity": 0.4 },
+      "note": "ad474.png is the top visible photo layer above d51d1.png. The source itself is not darkened; Figma depicts the first card's hover overlay."
+    },
+    {
+      "id": "arrival-2",
+      "nodeId": "1181:2924",
+      "asset": "knit-front",
+      "frameSizeAtReferenceWidth": { "width": 608, "height": 746 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "note": "22ea6.png is the top visible layer; use the exact original instead of the earlier flattened public/assets/product-editorial/new-knit.png."
+    },
+    {
+      "id": "arrival-3",
+      "nodeId": "1181:2926",
+      "asset": "arrival-jacket",
+      "frameSizeAtReferenceWidth": { "width": 608, "height": 746 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "note": "d2051.png is the top visible layer; use the exact original instead of the earlier flattened public/assets/product-editorial/new-jacket.png."
+    },
+    {
+      "id": "arrival-4",
+      "nodeId": "1181:2935",
+      "asset": "arrival-scarf",
+      "frameSizeAtReferenceWidth": { "width": 608, "height": 746 },
+      "imageCss": { "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "50% 50%" },
+      "note": "08897.png is the top visible layer. The Figma frame 1181:2934 starts at x=1908, leaving a 12px strip inside the 1920px page."
+    }
+  ],
+  "sharedShellVerification": {
+    "method": "Byte-for-byte SHA-256 comparison of newly downloaded SVGs, XML root dimensions, and source/CSS inspection of the shared components. Account mismatch independently rasterized with sharp at 16px and 256px; no SVG geometry was copied into application code.",
+    "exactMatches": [
+      {
+        "sourceAsset": "689eb.svg",
+        "nodeId": "1181:3061",
+        "file": "src/assets/icons/letora-white.svg",
+        "width": 120,
+        "height": 25,
+        "sha256": "e9b21d3a8a1eec156eeef6545a5801990c7fbada420b3fa8a1096a8b31372620",
+        "note": "SiteHeader product uses this exact white logo at 120x25 through AssetIcon."
+      },
+      {
+        "sourceAsset": "29fbf.svg",
+        "nodeId": "1181:2939",
+        "file": "src/assets/product-shell/footer-wordmark.svg",
+        "width": 1851.34,
+        "height": 391,
+        "sha256": "ed20b2de91f0c4fb2741fe03dc733b66c93d98c888a3de4176a25c87cb270aa9",
+        "note": "Exact #E3E3E3 source. Animated FooterWordmark's home source also has identical geometry and viewBox; product variant supplies the matching fill."
+      },
+      {
+        "sourceAsset": "d6940.svg",
+        "file": "src/assets/icons/search.svg",
+        "width": 16,
+        "height": 16,
+        "sha256": "2b38baf18b1e93ff86d65e70572239df7a787ced473023b90602d8b5f2fcddee"
+      },
+      {
+        "sourceAsset": "7f4b2.svg",
+        "file": "src/assets/icons/bag.svg",
+        "width": 16,
+        "height": 16,
+        "sha256": "027b531553bc7f5fb2c14e2a26fb85c9bb88dc71d96bed9efe26519c515f0e50"
+      },
+      {
+        "sourceAsset": "32992.svg",
+        "file": "src/assets/home/arrow-indigo.svg",
+        "width": 16,
+        "height": 16,
+        "sha256": "a019200194232693171228fb9374f34b2a85703f22a997698673e3a3c89fe910",
+        "note": "Exact footer chevron, rendered by SiteFooter product."
+      },
+      {
+        "sourceAsset": "a69b4.svg",
+        "file": "public/assets/product/chevron-right.svg",
+        "width": 16,
+        "height": 16,
+        "sha256": "a019200194232693171228fb9374f34b2a85703f22a997698673e3a3c89fe910",
+        "note": "Exact expanded FAQ source. Existing CSS rotate(-90deg) produces the matching up arrow; Figma's additional vertical reflection leaves this vertically symmetric source unchanged."
+      },
+      {
+        "sourceAsset": "3120e.svg",
+        "file": "public/assets/product/chevron-right.svg",
+        "width": 16,
+        "height": 16,
+        "sha256": "a019200194232693171228fb9374f34b2a85703f22a997698673e3a3c89fe910",
+        "note": "Exact collapsed FAQ source; existing CSS and Figma both rotate the source by 90 degrees."
+      }
+    ],
+    "mismatches": [
+      {
+        "sourceAsset": "40b4c.svg",
+        "existingFile": "src/assets/icons/account.svg",
+        "existingSha256": "6b80b1cfe7b6304725d084d64061243a1e5f3f5b3ba7301e824b93844881ccd5",
+        "replacementAsset": "header-account",
+        "note": "Both are 16x16 and white, but the Figma source renders the head outline while the existing filled outline also contains shoulders. At 16px, 97 of 256 alpha pixels differ. App's product-v3 branch opts into this source through SiteHeader.accountIcon; the legacy default remains unchanged.",
+        "comparisonArtifact": ".codex-qa/product-v3-account-comparison.png"
+      }
+    ]
+  },
+  "verification": {
+    "method": "SHA-256 comparison against all files in the listed existing asset directories; image dimensions and true raster formats inspected with System.Drawing; new side/back sources visually inspected.",
+    "comparedDirectories": ["public/assets/product-editorial", "public/assets/product", "src/assets/home", "src/assets/home-refresh", "src/assets/icons", "src/assets/product-shell"],
+    "exactReuse": ["src/assets/home-refresh/new-puffer.png", "src/assets/home-refresh/new-bomber.png", "src/assets/home-refresh/new-jacket.png", "src/assets/home/new-peek.jpg", "public/assets/product-editorial/option-arrow.svg", "public/assets/product-editorial/tab-dot.svg", "src/assets/icons/letora-white.svg", "src/assets/icons/search.svg", "src/assets/icons/bag.svg", "src/assets/product-shell/footer-wordmark.svg", "src/assets/home/arrow-indigo.svg", "public/assets/product/chevron-right.svg"],
+    "newFiles": ["public/assets/product-v3/knit-side.png", "public/assets/product-v3/knit-back.jpg", "public/assets/product-v3/account.svg"],
+    "sourcePixelsModified": false,
+    "renderedPageVerified": false
+  }
+}

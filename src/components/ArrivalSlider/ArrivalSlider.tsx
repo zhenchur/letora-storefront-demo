@@ -7,9 +7,17 @@ import jacket from '../../assets/home/new-jacket.jpg'
 import scarf from '../../assets/home/new-peek.jpg'
 import './ArrivalSlider.css'
 
-const products = [
+export type ArrivalProduct = {
+  image: string
+  title: ReactNode
+  price: string
+  alt: string
+  href?: string
+}
+
+const defaultProducts: readonly ArrivalProduct[] = [
   { image: bomber, title: <>Бомбер "<em>Барельеф</em>"</>, price: '9 900 ₽', alt: 'Бомбер «Барельеф» пыльно-розового цвета', href: siteUrl('product/barelyef') },
-  { image: puffer, title: <>Пуховик "Ох, и <em>личность</em> ты"</>, price: '48 000 ₽', alt: 'Детали пуховика «Ох, и личность ты»' },
+  { image: puffer, title: <>Пуховик "Ох, и <em>личность</em> ты"</>, price: '48 000 ₽', alt: 'Детали пуховика «Ох, и личность ты»', href: siteUrl('product/barelyef-new') },
   { image: jacket, title: <>Жакет "<em>Форма</em>" из хлопка</>, price: '22 000 ₽', alt: 'Хлопковый жакет «Форма»' },
   // The reference only supplies a photograph for the fourth item, without a price.
   { image: scarf, title: <>Стёганый <em>шарф</em></>, price: '', alt: 'Объёмный стёганый шарф пыльно-розового цвета' },
@@ -29,7 +37,11 @@ function Caption({ index, title, price, hover = false, copy = false }: {
 
 export type ArrivalSliderHandle = { previous: () => void; next: () => void }
 
-export function ArrivalSlider({ label = 'Новинки', ref }: { label?: string; ref?: Ref<ArrivalSliderHandle> }) {
+export function ArrivalSlider({ label = 'Новинки', products = defaultProducts, ref }: {
+  label?: string
+  products?: readonly ArrivalProduct[]
+  ref?: Ref<ArrivalSliderHandle>
+}) {
   const viewport = useRef<HTMLDivElement>(null)
   const { previous, next } = useArrivalSlider(viewport)
   useImperativeHandle(ref, () => ({ previous, next }), [previous, next])

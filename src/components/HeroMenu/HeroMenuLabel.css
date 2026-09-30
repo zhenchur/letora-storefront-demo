@@ -1,66 +1,111 @@
-@font-face {
-  font-family: 'Wix Madefor Text';
-  src: url('../../assets/fonts/WixMadeforText-Variable.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-}
-
 .hero-menu-label {
   position: relative;
   display: inline-block;
+  transition: opacity .16s ease-out;
 }
 
 .hero-menu-label__bracket {
   position: absolute;
   top: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .4s ease-out;
+  visibility: hidden;
 }
 
-.hero-menu-label__bracket--left { right: calc(100% + 10px); }
-.hero-menu-label__bracket--right { left: calc(100% + 10px); }
-.hero-menu-label[data-active] .hero-menu-label__bracket { opacity: 1; }
+.hero-menu-label__bracket:first-child { right: calc(100% + 16px); }
+.hero-menu-label__bracket:last-child { left: calc(100% + 16px); }
 
-.hero-menu-label__words {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 400px;
-  height: 150px;
-  overflow: hidden;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  font-family: 'Wix Madefor Text', var(--font-sans);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.27;
-  letter-spacing: .14px;
-  text-transform: lowercase;
-  text-align: left;
+.hero[data-menu-active] .hero__category:not([data-menu-active]) .hero-menu-label {
+  opacity: .6;
 }
 
-.hero-menu-label__words > span {
+.hero__category[data-menu-active] .hero-menu-label__bracket { visibility: visible; }
+
+/* Keep the path from the label to either bracket inside the active button. */
+.hero__category[data-menu-active]::before {
   position: absolute;
+  inset: -4px -26px;
+  content: '';
+}
+
+.hero-menu-models {
+  position: absolute;
+  inset: 0;
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.hero-menu-models__group {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hero-menu-models__group[data-active] { opacity: 1; visibility: visible; }
+
+.hero-menu-models__name {
+  position: absolute;
+  transform: translateY(-50%);
+  color: var(--palette-white);
+  font: 600 14px / 18px var(--font-sans);
   white-space: nowrap;
-  pointer-events: none;
 }
 
-.hero-menu-label__words > [hidden] { display: none; }
+.hero-menu-models__text { display: block; }
 
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .hero:has(.hero-menu-label) .hero__category { transition: opacity .4s ease-out; }
-  .hero:has(.hero-menu-label) .hero__caption,
-  .hero:has(.hero-menu-label) .hero__slider { transition: filter .4s ease-out; }
+.hero-menu-models__name--0 { left: calc(8.333333% + 18px); top: 44.111111%; }
+.hero-menu-models__name--1 { left: calc(25% + 72px); top: 56%; }
+.hero-menu-models__name--2 { left: calc(41.666667% + 126px); top: 48.888889%; }
+.hero-menu-models__name--3 { left: calc(66.666667% + 20px); top: 44.111111%; }
+.hero-menu-models__name--4 { left: calc(83.333333% + 74px); top: 56%; }
 
-  .hero:has(.hero-menu-label[data-active]) .hero__category:not(:has(.hero-menu-label[data-active])) { opacity: .1; }
-  .hero:has(.hero-menu-label[data-active]) .hero__caption,
-  .hero:has(.hero-menu-label[data-active]) .hero__slider { filter: opacity(.1); }
+/* Each category keeps its own composition between repeated hovers. */
+.hero-menu-models__group[data-menu-category="skirts"] .hero-menu-models__name--0 { left: 11%; top: 51%; }
+.hero-menu-models__group[data-menu-category="skirts"] .hero-menu-models__name--1 { left: 28%; top: 42%; }
+.hero-menu-models__group[data-menu-category="skirts"] .hero-menu-models__name--2 { left: 51%; top: 59%; }
+.hero-menu-models__group[data-menu-category="skirts"] .hero-menu-models__name--3 { left: 69%; top: 48%; }
+.hero-menu-models__group[data-menu-category="skirts"] .hero-menu-models__name--4 { left: 85%; top: 62%; }
+
+.hero-menu-models__group[data-menu-category="trousers"] .hero-menu-models__name--0 { left: 9%; top: 58%; }
+.hero-menu-models__group[data-menu-category="trousers"] .hero-menu-models__name--1 { left: 32%; top: 48%; }
+.hero-menu-models__group[data-menu-category="trousers"] .hero-menu-models__name--2 { left: 49%; top: 39%; }
+.hero-menu-models__group[data-menu-category="trousers"] .hero-menu-models__name--3 { left: 66%; top: 60%; }
+.hero-menu-models__group[data-menu-category="trousers"] .hero-menu-models__name--4 { left: 88%; top: 46%; }
+
+.hero-menu-models__group[data-menu-category="outerwear"] .hero-menu-models__name--0 { left: 12%; top: 39%; }
+.hero-menu-models__group[data-menu-category="outerwear"] .hero-menu-models__name--1 { left: 29%; top: 61%; }
+.hero-menu-models__group[data-menu-category="outerwear"] .hero-menu-models__name--2 { left: 53%; top: 51%; }
+.hero-menu-models__group[data-menu-category="outerwear"] .hero-menu-models__name--3 { left: 68%; top: 38%; }
+.hero-menu-models__group[data-menu-category="outerwear"] .hero-menu-models__name--4 { left: 86%; top: 57%; }
+
+.hero-menu-models__group[data-menu-category="tops"] .hero-menu-models__name--0 { left: 10%; top: 54%; }
+.hero-menu-models__group[data-menu-category="tops"] .hero-menu-models__name--1 { left: 33%; top: 39%; }
+.hero-menu-models__group[data-menu-category="tops"] .hero-menu-models__name--2 { left: 48%; top: 57%; }
+.hero-menu-models__group[data-menu-category="tops"] .hero-menu-models__name--3 { left: 70%; top: 51%; }
+.hero-menu-models__group[data-menu-category="tops"] .hero-menu-models__name--4 { left: 87%; top: 41%; }
+
+.hero-menu-models__group[data-menu-category="blouses"] .hero-menu-models__name--0 { left: 12%; top: 46%; }
+.hero-menu-models__group[data-menu-category="blouses"] .hero-menu-models__name--1 { left: 30%; top: 57%; }
+.hero-menu-models__group[data-menu-category="blouses"] .hero-menu-models__name--2 { left: 50%; top: 41%; }
+.hero-menu-models__group[data-menu-category="blouses"] .hero-menu-models__name--3 { left: 66%; top: 55%; }
+.hero-menu-models__group[data-menu-category="blouses"] .hero-menu-models__name--4 { left: 87%; top: 49%; }
+
+.hero[data-menu-active] .hero-menu-models { opacity: 1; visibility: visible; }
+.hero[data-menu-open] .hero__media::after { opacity: .8; }
+.hero[data-menu-open] .hero__captions,
+.hero[data-menu-open] .hero__slider {
+  filter: opacity(0);
+  transition-duration: .12s;
 }
+.hero[data-menu-open] .hero__action,
+.hero[data-menu-open] .hero__slider button { pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-menu-label__bracket { transition: none; }
+  .hero-menu-label,
+  .hero-menu-models,
+  .hero__media::after,
+  .hero__captions,
+  .hero__slider,
+  .hero[data-menu-open] .hero__captions,
+  .hero[data-menu-open] .hero__slider { transition: none; }
 }

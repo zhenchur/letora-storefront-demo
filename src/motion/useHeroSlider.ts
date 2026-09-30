@@ -18,6 +18,7 @@ export function useHeroSlider(
   const [paused, setPaused] = useState(true)
   const [autoplayEnabled, setAutoplayEnabled] = useState(true)
   const manualPause = useRef(false)
+  const actionHoverEnabled = useRef<boolean | null>(null)
   const controls = useRef({ next: noop, previous: noop, togglePause: noop })
 
   useGSAP((_context, contextSafe) => {
@@ -26,6 +27,7 @@ export function useHeroSlider(
 
     const photos = Array.from(section.querySelectorAll<HTMLImageElement>('.hero__photo'))
     const captions = Array.from(section.querySelectorAll<HTMLElement>('.hero__caption'))
+    const actions = captions.map((caption) => caption.querySelector<HTMLElement>('.hero__action'))
     const captionText = captions.map((caption) =>
       Array.from(caption.querySelectorAll<HTMLElement>('[data-text-reveal]')))
     const chrome = Array.from(section.querySelectorAll<HTMLElement>('.hero__detail, .hero__slider > button'))
@@ -34,6 +36,7 @@ export function useHeroSlider(
     if (!progress || !total) return
 
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const hoverPreference = window.matchMedia('(hover: hover) and (pointer: fine)')
     const bounds = section.getBoundingClientRect()
     let inView = bounds.bottom > 0 && bounds.top < window.innerHeight
     let reducedMotion = motionPreference.matches
@@ -55,12 +58,12 @@ export function useHeroSlider(
         const bodyCopy = element.dataset.textReveal === 'copy'
         const { from, to } = createTextRevealVars({ bodyCopy })
         const start = position + elementIndex * to.stagger.each
-        if (bodyCopy) {
+        if (bodyCopy || element.dataset.textReveal === 'lines') {
           splits.push(SplitText.create(element, {
             type: 'lines',
             tag: 'span',
             linesClass: 'text-reveal-line',
-            reduceWhiteSpace: false,
+            reduceWhiteSpace: !bodyCopy,
             autoSplit: true,
             aria: 'auto',
             onSplit: contextSafe((split: SplitText) => {
@@ -99,8 +102,12 @@ export function useHeroSlider(
 
     const syncPause = () => {
       if (disposed) return
+      const action = actions[index]
+      const actionHovered = (actionHoverEnabled.current ?? hoverPreference.matches)
+        && action?.matches(':hover') && !action.closest('[inert]')
+        && !section.hasAttribute('data-menu-open')
       const shouldPause = !siteReady || !ready || changing || total < 2 || reducedMotion
-        || manualPause.current || document.hidden || !inView
+        || manualPause.current || document.hidden || !inView || !!actionHovered
       setPaused(shouldPause)
       if (shouldPause) timer?.pause()
       else timer?.resume()
@@ -186,6 +193,14 @@ export function useHeroSlider(
       revealCaption(fade, nextIndex, TEXT_EXIT_MOTION.duration)
     }
 
+    const onActionEnter = contextSafe((event: PointerEvent) => {
+      actionHoverEnabled.current = event.pointerType !== 'touch'
+      syncPause()
+    })
+    const onActionLeave = contextSafe(() => {
+      actionHoverEnabled.current = false
+      syncPause()
+    })
     const onVisibilityChange = contextSafe(syncPause)
     const onIntersection = contextSafe((entries: IntersectionObserverEntry[]) => {
       inView = entries[0].isIntersecting
@@ -246,6 +261,11 @@ export function useHeroSlider(
     observer.observe(section)
     document.addEventListener('visibilitychange', onVisibilityChange)
     motionPreference.addEventListener('change', onMotionChange)
+    actions.forEach((action) => {
+      action?.addEventListener('pointerenter', onActionEnter)
+      action?.addEventListener('pointerleave', onActionLeave)
+      action?.addEventListener('pointercancel', onActionLeave)
+    })
 
     return () => {
       disposed = true
@@ -253,6 +273,11 @@ export function useHeroSlider(
       observer.disconnect()
       document.removeEventListener('visibilitychange', onVisibilityChange)
       motionPreference.removeEventListener('change', onMotionChange)
+      actions.forEach((action) => {
+        action?.removeEventListener('pointerenter', onActionEnter)
+        action?.removeEventListener('pointerleave', onActionLeave)
+        action?.removeEventListener('pointercancel', onActionLeave)
+      })
       timer?.kill()
       fade?.kill()
       intro?.kill()

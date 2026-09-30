@@ -1,5 +1,8 @@
 import { useRef } from 'react'
 import arrow from '../assets/home/arrow-terracotta.svg'
+import indigoArrow from '../assets/home/arrow-indigo.svg'
+import productWordmark from '../assets/product-shell/footer-wordmark.svg'
+import homeWordmark from '../assets/home-refresh/footer-wordmark.svg'
 import { FooterWordmark } from './FooterWordmark'
 import { HoverText } from '../motion/HoverText'
 import { ArrowHover } from '../motion/ArrowHover'
@@ -13,12 +16,13 @@ const groups = [
   { title: 'Соцсети', links: ['VK', 'Telegram'] },
 ]
 
-export function SiteFooter({ motion = false }: { motion?: boolean }) {
+export function SiteFooter({ motion = false, variant = 'default' }: { motion?: boolean; variant?: 'default' | 'product' | 'home' }) {
   const footer = useRef<HTMLElement>(null)
   useTextMotion(footer, motion)
+  const footerArrow = variant === 'default' ? arrow : indigoArrow
 
   return (
-    <footer ref={footer} className="site-footer">
+    <footer ref={footer} className={`site-footer${variant === 'default' ? '' : ` site-footer--${variant}`}`}>
       <div className="site-footer__top">
         {groups.map(({ title, links }) => (
           <div className="site-footer__group" key={title}>
@@ -34,7 +38,7 @@ export function SiteFooter({ motion = false }: { motion?: boolean }) {
                   key={label}
                 >
                   {motion ? <HoverText>{label}</HoverText> : <span>{label}</span>}
-                  <ArrowHover src={arrow} />
+                  {variant === 'product' && !motion ? <img className="site-footer__arrow" src={footerArrow} width={16} height={16} alt="" /> : <ArrowHover src={footerArrow} />}
                 </button>
               ))}
             </nav>
@@ -44,7 +48,7 @@ export function SiteFooter({ motion = false }: { motion?: boolean }) {
           <div className="site-footer__email" data-arrow-trigger={motion || undefined} data-text-reveal={motion ? 'block' : undefined}>
             <input type="email" placeholder="Адрес электронной почты" aria-label="Адрес электронной почты" disabled />
             <button type="button" aria-label="Подписаться" disabled>
-              <ArrowHover src={arrow} />
+              {variant === 'product' && !motion ? <img className="site-footer__arrow" src={footerArrow} width={16} height={16} alt="" /> : <ArrowHover src={footerArrow} />}
             </button>
           </div>
           <label className="site-footer__consent" data-text-reveal={motion ? 'block' : undefined}>
@@ -53,7 +57,11 @@ export function SiteFooter({ motion = false }: { motion?: boolean }) {
           </label>
         </div>
       </div>
-      <FooterWordmark motion={motion} />
+      <FooterWordmark
+        motion={motion}
+        src={variant === 'product' ? productWordmark : variant === 'home' ? homeWordmark : undefined}
+        fill={variant === 'product' ? '#E3E3E3' : variant === 'home' ? '#DCBEAF' : undefined}
+      />
       <div className="site-footer__legal">
         <button
           type="button"
