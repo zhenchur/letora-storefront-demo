@@ -78,21 +78,21 @@ export default function ProductV3Page() {
             <figure className="product-v3__photo product-v3__photo--side" data-product-v3-photo>
               <div className="product-v3__photo-mask">
                 <div className="product-v3__photo-parallax">
-                  <img src={`${assets}knit-side.png`} width="3587" height="3761" alt="Трикотажный комплект — вид сбоку" loading="lazy" decoding="async" />
+                  <img src={`${assets}knit-side.png`} width="3587" height="3761" alt="Трикотажный комплект — вид сбоку" loading="eager" decoding="async" />
                 </div>
               </div>
             </figure>
             <figure className="product-v3__photo" data-product-v3-photo>
               <div className="product-v3__photo-mask">
                 <div className="product-v3__photo-parallax">
-                  <img src={knitFront} width="2507" height="3761" alt="Трикотажный комплект — вид спереди" loading="lazy" decoding="async" />
+                  <img src={knitFront} width="2507" height="3761" alt="Трикотажный комплект — вид спереди" loading="eager" decoding="async" />
                 </div>
               </div>
             </figure>
             <figure className="product-v3__photo" data-product-v3-photo>
               <div className="product-v3__photo-mask">
                 <div className="product-v3__photo-parallax">
-                  <img src={`${assets}knit-back.jpg`} width="2507" height="3761" alt="Трикотажный комплект — вид сзади" loading="lazy" decoding="async" />
+                  <img src={`${assets}knit-back.jpg`} width="2507" height="3761" alt="Трикотажный комплект — вид сзади" loading="eager" decoding="async" />
                 </div>
               </div>
             </figure>
